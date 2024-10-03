@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".crops_admin">
+
+    <!-- Decorative Images -->
+
+
+    <!-- Title -->
+
+
+    <!-- Form Elements -->
+
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_marginStart="10dp"-->
+<!--        android:id="@+id/cropaddnew"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginEnd="208dp"-->
+<!--        android:layout_marginBottom="681dp"-->
+<!--        android:text="Crop Add New"-->
+<!--        android:textColor="#55983E"-->
+<!--        android:textSize="25sp"-->
+<!--        android:textStyle="bold" />-->
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/cropProfile"
+        android:layout_width="52dp"
+        android:layout_height="44dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/camera" />
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="130dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="-22dp"
+        android:layout_marginTop="-16dp"
+        android:src="@drawable/cloverk5" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="190dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="-4dp"
+        android:layout_marginEnd="315dp"
+        android:layout_marginBottom="-64dp"
+        android:src="@drawable/leaf2" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="190dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="-48dp"
+        android:src="@drawable/leaf2k1" />
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="190dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="-48dp"
+        android:src="@drawable/leaf2k1" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/form"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_centerInParent="true">
+
+
+
+        <!-- Crop Name -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Crop Name"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="5dp"
+            android:textSize="18sp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:drawablePadding="10dp"
+            android:hint="Enter crop name"
+            android:id="@+id/input_name_crop"
+            android:background="@drawable/custom_edittext_background"
+            android:inputType="text"/>
+
+        <!-- Crop Description -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="5dp"
+            android:textSize="18sp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:padding="10dp"
+            android:hint="Enter crop description"
+            android:background="@drawable/custom_edittext_background"
+            android:id="@+id/input_description_crop"
+            android:inputType="textMultiLine"
+            android:gravity="top"/>
+
+        <!-- Crop Price -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price per Unit"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="5dp"
+            android:textSize="18sp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:hint="Enter price"
+            android:background="@drawable/custom_edittext_background"
+            android:id="@+id/input_price_crop"
+            android:inputType="numberDecimal"/>
+
+        <!-- Crop Stock -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stock Quantity"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="5dp"
+            android:textSize="18sp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:hint="Enter stock quantity"
+            android:background="@drawable/custom_edittext_background"
+            android:id="@+id/input_stock_crop"
+            android:inputType="number"/>
+
+        <!-- Crop Category -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Category"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="5dp"
+            android:textSize="18sp"/>
+        <Spinner
+            android:id="@+id/input_category_crop"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/custom_edittext_background"
+            android:padding="10dp" />
+
+        <!-- Is Organic Checkbox -->
+        <CheckBox
+            android:id="@+id/input_is_organic_crop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Is Organic?"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/black"/>
+
+
+
+        <!-- Add Crop Button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/custom_login_btn_background"
+            android:text="Add Crop"
+            android:id="@+id/button_add_crop"
+            android:textSize="17sp"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

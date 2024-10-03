@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- edyt text colour -->
+    <color name="edit_text_background_colr">#E7E7F2</color>
+    <color name="edit_text_border_colr">#646467</color>
+    <color name="buttom_bg">#EF4B3F</color>
+    <color name="buttom_br">#C81205</color>
+</resources>
