@@ -34,6 +34,7 @@
         android:layout_marginTop="-13dp"
         android:layout_marginEnd="240dp"
         android:layout_marginBottom="562dp"
+        android:id="@+id/logo2"
         android:src="@drawable/logo2" />
 
     <ImageView
@@ -65,35 +66,44 @@
         android:layout_marginBottom="531dp"
         android:src="@drawable/leaf2k1" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="569dp"
-        android:text="Welcome"
-        android:textColor="#55983E"
-        android:textSize="17sp"
-        android:textStyle="bold" />
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_marginStart="25dp"-->
+<!--        android:layout_marginTop="44dp"-->
+<!--        android:layout_marginEnd="315dp"-->
+<!--        android:layout_marginBottom="664dp"-->
+<!--        android:text="Welcome"-->
+<!--        android:textColor="#55983E"-->
+<!--        android:textSize="17sp"-->
+<!--        android:textStyle="bold" />-->
+
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="196dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="33dp"
-        android:layout_marginBottom="545dp"
+        android:layout_marginStart="113dp"
+        android:layout_marginTop="138dp"
+        android:layout_marginEnd="102dp"
+        android:layout_marginBottom="570dp"
         android:text="Sign in to continue!"
         android:textColor="#55983E"
-        android:textSize="17sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="29dp"
+        android:layout_margin="20dp"
         android:layout_centerInParent="true">
         <TextView
             android:layout_width="wrap_content"
@@ -159,14 +169,6 @@
             android:text="SIGN UP"
             android:textSize="15sp"/>
 
-        <TextView
-            android:id="@+id/admin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:text="admin page"
-            android:textSize="15sp" />
     </LinearLayout>
 
 

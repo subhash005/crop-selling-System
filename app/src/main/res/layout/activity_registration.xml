@@ -73,11 +73,16 @@
 
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="12dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="242dp"
         android:layout_marginBottom="681dp"
         android:text="Create New"
         android:textColor="#55983E"
@@ -87,9 +92,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="12dp"
+        android:layout_marginTop="27dp"
         android:layout_marginBottom="654dp"
         android:text="Account"
         android:textColor="#55983E"

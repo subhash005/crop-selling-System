@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/nav_home_admin"
-        android:title="Home"
-        android:icon="@drawable/baseline_home_24"/>
+        android:title="Crops"
+        android:icon="@drawable/baseline_grass_24"/>
 
     <item android:id="@+id/nav_add_admin"
         android:title="Add Crops"
-        android:icon="@drawable/baseline_add_shopping_cart_24"/>
+        android:icon="@drawable/baseline_add_to_photos_24"/>
 
     <item android:id="@+id/nav_customers_admin"
         android:title="Customers"

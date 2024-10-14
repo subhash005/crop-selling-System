@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@drawable/custom_dailog"
+        android:elevation="8dp"
+        android:layout_margin="1dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Edit Crop Details"
+            android:layout_marginTop="5dp"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:paddingBottom="10dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/edit_crop_image"
+                android:layout_width="72dp"
+                android:layout_height="80dp"
+                android:layout_marginBottom="2dp"
+                android:src="@drawable/camera" />
+
+
+        </LinearLayout>
+
+        <!-- Crop Name -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Crop Name: "
+                android:textSize="16sp"
+                android:layout_marginEnd="8dp" />
+
+            <EditText
+                android:id="@+id/edit_crop_name"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Crop Name"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Crop Category -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Crop Category: "
+                android:textSize="16sp"
+                android:layout_marginEnd="8dp" />
+
+
+            <Spinner
+                android:id="@+id/edit_crop_category"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@android:drawable/button_onoff_indicator_on"/>
+        </LinearLayout>
+
+        <!-- Crop Description -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description: "
+                android:textSize="16sp"
+                android:layout_marginEnd="8dp" />
+
+            <EditText
+                android:id="@+id/edit_crop_description"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Crop Description"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Crop Price -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Price: Rs."
+                android:textSize="16sp"
+                android:layout_marginEnd="8dp" />
+
+            <EditText
+                android:id="@+id/edit_crop_price"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="0.00"
+                android:inputType="numberDecimal"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Crop Stock -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stock: "
+                android:textSize="16sp"
+                android:layout_marginEnd="8dp" />
+
+            <EditText
+                android:id="@+id/edit_crop_stock"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="0.00"
+                android:inputType="number"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Organic Status (Checkbox) -->
+        <CheckBox
+            android:id="@+id/edit_crop_isOrganic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Is Organic"
+            android:layout_marginTop="10dp" />
+
+        <!-- Save and Cancel Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+
+            <Button
+                android:id="@+id/btn_edit_update_crop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@android:color/holo_green_dark"
+                android:layout_marginEnd="16dp" />
+
+            <Button
+                android:id="@+id/btn_edit_Delete_crop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@android:color/holo_red_dark" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

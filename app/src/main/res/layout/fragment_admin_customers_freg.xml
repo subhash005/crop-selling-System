@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="15dp">
 
         <ImageView
             android:layout_width="105dp"
@@ -38,6 +38,6 @@
         android:id="@+id/recyclerView"
         android:layout_margin="10dp"
         android:scrollbars="vertical"
-        android:padding="16dp"/>
+        android:padding="5dp"/>
 
 </LinearLayout>

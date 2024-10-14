@@ -113,7 +113,7 @@ public class registration extends AppCompatActivity {
                                                             public void onComplete(@NonNull Task<Void> task) {
                                                                 if (task.isSuccessful()) {
                                                                     // Redirect to MainActivity after successful registration
-                                                                    Intent intent = new Intent(registration.this, MainActivity.class);
+                                                                    Intent intent = new Intent(registration.this, login.class);
                                                                     startActivity(intent);
                                                                     finish();
                                                                 }else {

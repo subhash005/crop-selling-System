@@ -2,11 +2,24 @@ package com.example.cropmanagmentsystem;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +27,15 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class admin_home_freg extends Fragment {
+    private RecyclerView recyclerView_cropdata;
+    private admin_crop_recycler_adapter adminCropRecyclerAdapter;
+    private List<crops_model> cropList=new ArrayList<>();
+
+
+    //2nd recycler view
+    private RecyclerView recyclerView_categorydata;
+    private category_adapter category_adapter;
+    private List<Category> categoryList=new ArrayList<>();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,6 +81,68 @@ public class admin_home_freg extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_admin_home_freg, container, false);
+        View view= inflater.inflate(R.layout.fragment_admin_home_freg, container, false);
+        recyclerView_cropdata=view.findViewById(R.id.recyclerView_cropdata);
+        recyclerView_cropdata.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        adminCropRecyclerAdapter = new admin_crop_recycler_adapter(getActivity(),cropList);
+        recyclerView_cropdata.setAdapter(adminCropRecyclerAdapter);
+        loadCropData();
+
+
+        //2nd recycler view
+        recyclerView_categorydata=view.findViewById(R.id.recyclerView_categorydata);
+        recyclerView_categorydata.setLayoutManager(new GridLayoutManager(getActivity(),4));
+        category_adapter= new category_adapter(getActivity(),categoryList);
+        recyclerView_categorydata.setAdapter(category_adapter);
+        loadCategories();
+
+        return view;
+    }
+
+    private void loadCategories() {
+        DatabaseReference categoryRef=FirebaseDatabase.getInstance().getReference("categories");
+        categoryRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                categoryList.clear();
+                for (DataSnapshot categorySnapshot: snapshot.getChildren()){
+                    Category category= categorySnapshot.getValue(Category.class);
+                    if(category!=null){
+                        categoryList.add(category);
+                        Log.d("Category", "Category: " + category.getCategoryName());  // Check if categories are being retrieved
+                    }
+                    category_adapter.notifyDataSetChanged();
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void loadCropData() {
+        DatabaseReference cropRef= FirebaseDatabase.getInstance().getReference("Crops");
+        cropRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                cropList.clear();
+                for(DataSnapshot cropSnapshot : snapshot.getChildren()){
+                    crops_model crop = cropSnapshot.getValue(crops_model.class);
+                    if(crop!= null){
+                        cropList.add(crop);
+                    }
+                    adminCropRecyclerAdapter.notifyDataSetChanged(); // Notify adapter that data has changed
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

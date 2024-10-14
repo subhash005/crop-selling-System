@@ -8,26 +8,29 @@ public class crops_model {
     boolean crop_isOrganic;
     int crop_stock;
     double crop_price;
+    String cropId;
 
-    public crops_model(String crop_pic, String crop_name, String crop_description, boolean crop_isOrganic, String crop_category, int crop_stock, double crop_price) {
+    public crops_model(String crop_pic, String crop_name, String crop_description, String crop_category, boolean crop_isOrganic, int crop_stock, double crop_price, String cropId) {
         this.crop_pic = crop_pic;
         this.crop_name = crop_name;
         this.crop_description = crop_description;
-        this.crop_isOrganic = crop_isOrganic;
         this.crop_category = crop_category;
+        this.crop_isOrganic = crop_isOrganic;
         this.crop_stock = crop_stock;
         this.crop_price = crop_price;
+        this.cropId = cropId;
+    }
+    public crops_model( String crop_name, String crop_description, String crop_category, boolean crop_isOrganic, int crop_stock, double crop_price, String cropId) {
+        this.crop_name = crop_name;
+        this.crop_description = crop_description;
+        this.crop_category = crop_category;
+        this.crop_isOrganic = crop_isOrganic;
+        this.crop_stock = crop_stock;
+        this.crop_price = crop_price;
+        this.cropId = cropId;
     }
 
     public crops_model() {
-    }
-
-    public String getCrop_name() {
-        return crop_name;
-    }
-
-    public void setCrop_name(String crop_name) {
-        this.crop_name = crop_name;
     }
 
     public String getCrop_pic() {
@@ -36,6 +39,14 @@ public class crops_model {
 
     public void setCrop_pic(String crop_pic) {
         this.crop_pic = crop_pic;
+    }
+
+    public String getCrop_name() {
+        return crop_name;
+    }
+
+    public void setCrop_name(String crop_name) {
+        this.crop_name = crop_name;
     }
 
     public String getCrop_description() {
@@ -76,5 +87,13 @@ public class crops_model {
 
     public void setCrop_price(double crop_price) {
         this.crop_price = crop_price;
+    }
+
+    public String getCropId() {
+        return cropId;
+    }
+
+    public void setCropId(String cropId) {
+        this.cropId = cropId;
     }
 }

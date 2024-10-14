@@ -1,10 +1,15 @@
 package com.example.cropmanagmentsystem;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +20,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Firebase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +49,7 @@ public class crops_admin extends Fragment {
     private CheckBox input_is_organic_crop;
     private Button button_add_crop;
     private CircleImageView cropProfile;
+    private Uri image_uri;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -95,10 +108,115 @@ public class crops_admin extends Fragment {
         // Load categories into spinner
         load_categories();
 
+        button_add_crop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveCropData();
+            }
+        });
 
+        cropProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(intent,10);
+            }
+        });
         return view;
     }
 
+    //handling the image uri from intent image
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 10 && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
+            image_uri = data.getData();
+            try {
+                // Display the selected image
+                cropProfile.setImageURI(image_uri);
+            } catch (Exception e) {
+                Toast.makeText(getActivity(), "Error loading image", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    private void saveCropData() {
+        String name_crop=input_name_crop.getText().toString();
+        String description_crop=input_description_crop.getText().toString();
+        String stock_crop=input_stock_crop.getText().toString();
+        String price_crop=input_price_crop.getText().toString();
+        String category_crop=input_category_crop.getSelectedItem().toString();
+        boolean organic_crop=input_is_organic_crop.isChecked();
+
+        //checking inputs value are blank or not
+        if(name_crop.isEmpty() || description_crop.isEmpty()|| stock_crop.isEmpty()|| price_crop.isEmpty() ){
+            Toast.makeText(getActivity(), "Fill all the details", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int stock =Integer.parseInt(stock_crop);
+        double price=Double.parseDouble(price_crop);
+
+        uploadImageAndSaveCrop(name_crop,description_crop,category_crop,organic_crop,stock,price);
+    }
+
+    private void uploadImageAndSaveCrop(final String name_crop,final String description_crop,final String category_crop,final boolean organic_crop,final int stock,final double price) {
+        // Check if the image URI is null before proceeding
+        if (image_uri == null) {
+            Toast.makeText(getActivity(), "Please select an image", Toast.LENGTH_SHORT).show();
+            return;  // Don't proceed with upload if image isn't selected
+        }
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference("CropImage").child(System.currentTimeMillis() + ".jpg");
+        storageRef.putFile(image_uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String image_url=uri.toString();
+                        saveCropFirebaseData(image_url,name_crop,description_crop,category_crop,organic_crop,stock,price);
+
+                    }
+                });
+            }
+        });
+    }
+
+    private void saveCropFirebaseData(String image_url,String name_crop, String description_crop, String category_crop, boolean organic_crop, int stock, double price){
+        DatabaseReference cropRef=FirebaseDatabase.getInstance().getReference().child("Crops");
+        String cropId = cropRef.push().getKey();
+        Log.d("Firebase", "Crop ID: " + cropId);
+
+        cropRef.child(cropId).setValue(new crops_model(image_url,name_crop,description_crop,category_crop,organic_crop,stock,price,cropId)).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                resetInputFields();
+                Toast.makeText(getActivity(), "Crop Data is Added", Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
+
+
+    }
+
+    // Method to reset input fields
+    private void resetInputFields() {
+        input_name_crop.setText("");           // Clear crop name field
+        input_description_crop.setText("");    // Clear crop description field
+        input_price_crop.setText("");          // Clear price field
+        input_stock_crop.setText("");          // Clear stock field
+        input_category_crop.setSelection(0);   // Reset spinner to first category
+        input_is_organic_crop.setChecked(false); // Uncheck organic checkbox
+        cropProfile.setImageResource(R.drawable.camera); // Reset image to default
+    }
+
+
+
+    // loading the categoies in spinner
     private void load_categories(){
         DatabaseReference categoyRef= FirebaseDatabase.getInstance().getReference("categories");
         categoyRef.addValueEventListener(new ValueEventListener() {
@@ -120,5 +238,6 @@ public class crops_admin extends Fragment {
             }
         });
     }
+
 
 }

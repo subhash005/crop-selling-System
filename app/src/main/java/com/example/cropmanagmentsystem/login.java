@@ -28,8 +28,6 @@ FirebaseAuth auth;
 String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 TextView registration_log;
 
-//trails
-    TextView admin;
 
 
     @Override
@@ -38,16 +36,6 @@ TextView registration_log;
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
-        //trails
-        admin=findViewById(R.id.admin);
-        admin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(login.this, Admin.class);
-                startActivity(intent);
-                finish();
-            }
-        });
 
 
 
@@ -73,6 +61,17 @@ TextView registration_log;
             public void onClick(View v) {
                 String Email = email.getText().toString();
                 String Password = password.getText().toString();
+
+                // Check for admin credentials
+                if (Email.equals("admin") && Password.equals("admin")) {
+                    // If the admin credentials are correct, navigate to the Admin page
+                    Intent intent = new Intent(login.this, Admin.class);
+                    startActivity(intent);
+                    finish();
+                    return; // Exit the listener after navigating
+                }
+
+
                 if((TextUtils.isEmpty(Email))){
                     Toast.makeText(login.this,"Enter The Email",Toast.LENGTH_SHORT).show();
                 } else if ((TextUtils.isEmpty(Password))){

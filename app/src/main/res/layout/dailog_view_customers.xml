@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
+    android:gravity="center"
     android:padding="5dp">
 
     <androidx.cardview.widget.CardView
@@ -22,7 +23,7 @@
             android:padding="8dp">
 
             <ImageView
-                android:id="@+id/userProfilePic"
+                android:id="@+id/viewUserProfilePic"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
@@ -30,7 +31,7 @@
                 android:src="@drawable/b" />
 
             <TextView
-                android:id="@+id/userName"
+                android:id="@+id/viewUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -41,7 +42,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/userMail"
+                android:id="@+id/viewUserMail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -68,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:id="@+id/userNumber"
+                        android:id="@+id/viewUserNumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -97,7 +98,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/userAdress"
+                    android:id="@+id/viewUserAdress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -109,6 +110,14 @@
                     android:textSize="18sp" />
             </LinearLayout>
 
+            <Button
+                android:id="@+id/viewCloseDialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/light_green_splash"
+                android:text="Close" />
 
         </LinearLayout>
 
