@@ -34,10 +34,30 @@ TextView registration_log;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+
+        auth = FirebaseAuth.getInstance();
+
+        // Check if the user is already logged in
+        if (auth.getCurrentUser() != null) {
+            // Get the current user ID
+            String userId = auth.getCurrentUser().getUid();
+
+            // Redirect based on user ID
+            if (userId.equals("U8sTOwcbLehCcUWRx6MCBbZMnBC3")) {
+                // Redirect admin user
+                Intent intent = new Intent(login.this, Admin.class);
+                startActivity(intent);
+                finish();
+            } else {
+                // Redirect regular user
+                Intent intent = new Intent(login.this, customer.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+
+
         setContentView(R.layout.activity_login);
-
-
-
 
         email=findViewById(R.id.logEmail);
         password=findViewById(R.id.logpassword);
@@ -62,15 +82,6 @@ TextView registration_log;
                 String Email = email.getText().toString();
                 String Password = password.getText().toString();
 
-                // Check for admin credentials
-                if (Email.equals("admin") && Password.equals("admin")) {
-                    // If the admin credentials are correct, navigate to the Admin page
-                    Intent intent = new Intent(login.this, Admin.class);
-                    startActivity(intent);
-                    finish();
-                    return; // Exit the listener after navigating
-                }
-
 
                 if((TextUtils.isEmpty(Email))){
                     Toast.makeText(login.this,"Enter The Email",Toast.LENGTH_SHORT).show();
@@ -82,22 +93,30 @@ TextView registration_log;
                     password. setError ("Give Password More Then Six Characters");
                     //Toast.makeText(login.this,"Give Password More Then Six Characters",Toast.LENGTH_SHORT).show();
                 }else {
-                    auth.signInWithEmailAndPassword(Email,Password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    auth.signInWithEmailAndPassword(Email, Password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
-                                try {
-                                    Intent intent = new Intent(login.this,MainActivity.class);
+                            if (task.isSuccessful()) {
+                                // Get the current user
+                                String userId = auth.getCurrentUser().getUid();
+
+                                if (userId.equals("U8sTOwcbLehCcUWRx6MCBbZMnBC3")) {
+                                    // If the user is the admin
+                                    Intent intent = new Intent(login.this, Admin.class);
                                     startActivity(intent);
                                     finish();
-                                }catch (Exception e){
-                                    Toast.makeText(login.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                                } else {
+                                    // For all other users
+                                    Intent intent = new Intent(login.this, customer.class);
+                                    startActivity(intent);
+                                    finish();
                                 }
-                            }else {
-                                Toast.makeText (login.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(login.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
+
                 }
 
 

@@ -1,5 +1,6 @@
 package com.example.cropmanagmentsystem;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
 import android.util.Log;
@@ -50,6 +53,8 @@ public class crops_admin extends Fragment {
     private Button button_add_crop;
     private CircleImageView cropProfile;
     private Uri image_uri;
+    private ProgressDialog progressDialog;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -105,12 +110,18 @@ public class crops_admin extends Fragment {
         button_add_crop=view.findViewById(R.id.button_add_crop);
         cropProfile=view.findViewById(R.id.cropProfile);
 
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Uploading Crop Data...");  // Message to display
+        progressDialog.setCancelable(false);  // Prevent user from canceling the dialog
+
+
         // Load categories into spinner
         load_categories();
 
         button_add_crop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("AddCrop", "Add Crop button clicked");
                 saveCropData();
             }
         });
@@ -143,7 +154,11 @@ public class crops_admin extends Fragment {
     }
 
 
+
     private void saveCropData() {
+
+        Log.d("SaveCropData", "saveCropData() called");
+
         String name_crop=input_name_crop.getText().toString();
         String description_crop=input_description_crop.getText().toString();
         String stock_crop=input_stock_crop.getText().toString();
@@ -165,10 +180,15 @@ public class crops_admin extends Fragment {
 
     private void uploadImageAndSaveCrop(final String name_crop,final String description_crop,final String category_crop,final boolean organic_crop,final int stock,final double price) {
         // Check if the image URI is null before proceeding
+        Log.d("uploadImageAndSaveCrop", "uploadImageAndSaveCrop() called");
+
         if (image_uri == null) {
             Toast.makeText(getActivity(), "Please select an image", Toast.LENGTH_SHORT).show();
             return;  // Don't proceed with upload if image isn't selected
         }
+        // Show the ProgressDialog
+        progressDialog.show();
+
         StorageReference storageRef = FirebaseStorage.getInstance().getReference("CropImage").child(System.currentTimeMillis() + ".jpg");
         storageRef.putFile(image_uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -177,6 +197,8 @@ public class crops_admin extends Fragment {
                     @Override
                     public void onSuccess(Uri uri) {
                         String image_url=uri.toString();
+                        Log.d("uploadImageAndSaveCrop_onworking", "uploadImageAndSaveCrop()_onworking called");
+
                         saveCropFirebaseData(image_url,name_crop,description_crop,category_crop,organic_crop,stock,price);
 
                     }
@@ -188,13 +210,23 @@ public class crops_admin extends Fragment {
     private void saveCropFirebaseData(String image_url,String name_crop, String description_crop, String category_crop, boolean organic_crop, int stock, double price){
         DatabaseReference cropRef=FirebaseDatabase.getInstance().getReference().child("Crops");
         String cropId = cropRef.push().getKey();
+        Log.d("saveCropFirebaseData", "saveCropFirebaseData() called");
+
         Log.d("Firebase", "Crop ID: " + cropId);
 
         cropRef.child(cropId).setValue(new crops_model(image_url,name_crop,description_crop,category_crop,organic_crop,stock,price,cropId)).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+//                Dismiss the ProgressDialog once the crop data is successfully uploaded
+                progressDialog.dismiss();
                 resetInputFields();
                 Toast.makeText(getActivity(), "Crop Data is Added", Toast.LENGTH_SHORT).show();
+//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.container_admin, new admin_home_freg()); // Replace with your fragment container ID
+//                fragmentTransaction.addToBackStack(null); // Optional, if you want to add it to the backstack
+//                fragmentTransaction.commit();
+
 
 
             }
@@ -227,9 +259,12 @@ public class crops_admin extends Fragment {
                     String cat=categorySnapshot.child("categoryName").getValue(String.class);
                     categoryList.add(cat);
                 }
-                ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1,categoryList);
-                categoryAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
-                input_category_crop.setAdapter(categoryAdapter);
+                // Ensure the activity context is not null before using it
+                if (getActivity() != null) {
+                    ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, categoryList);
+                    categoryAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
+                    input_category_crop.setAdapter(categoryAdapter);
+                }
             }
 
             @Override

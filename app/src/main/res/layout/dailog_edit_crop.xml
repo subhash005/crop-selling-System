@@ -184,8 +184,16 @@
                 android:text="Delete"
                 android:textColor="@android:color/white"
                 android:backgroundTint="@android:color/holo_red_dark" />
+            <Button
+                android:id="@+id/btn_select_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="select new image"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@android:color/holo_green_light" />
         </LinearLayout>
 
     </LinearLayout>
+    btn_select_image
 
 </androidx.constraintlayout.widget.ConstraintLayout>

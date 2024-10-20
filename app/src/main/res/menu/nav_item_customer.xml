@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_crop_customer"
+        android:icon="@drawable/baseline_grass_24"
+        android:title="Crops"/>
+    <item
+        android:id="@+id/nav_cart_customer"
+        android:icon="@drawable/baseline_add_shopping_cart_24"
+        android:title="Cart"/>
+    <item
+        android:id="@+id/nav_orders_customer"
+        android:icon="@drawable/baseline_reorder_24"
+        android:title="Orders"/>
+    <item
+        android:id="@+id/nav_profile_customer"
+        android:icon="@drawable/baseline_supervised_user_circle_24"
+        android:title="You"/>
+
+</menu>

@@ -1,7 +1,10 @@
 package com.example.cropmanagmentsystem;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -99,6 +102,10 @@ public class category_adapter extends RecyclerView.Adapter<category_adapter.View
             Toast.makeText(context, "Invalid category data", Toast.LENGTH_SHORT).show();
             return;  // Safeguard if category data is null
         }
+        if (context == null) {
+            Log.e("CategoryAdapter", "Context is null");
+            return;
+        }
 
         View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_category, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -119,7 +126,7 @@ public class category_adapter extends RecyclerView.Adapter<category_adapter.View
                 String newCategoryName = edit_category_name.getText().toString().trim();
 
                 if (!newCategoryName.isEmpty()) {
-
+                    try {
                         DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("categories")
                                 .child(category.getCategoryId());
 
@@ -133,9 +140,18 @@ public class category_adapter extends RecyclerView.Adapter<category_adapter.View
                                         } else {
                                             Toast.makeText(context, "Failed to update category", Toast.LENGTH_SHORT).show();
                                         }
-                                        dialog.dismiss(); // Close the dialog regardless
+                                        // Safely dismiss the dialog after the update
+                                        if (dialog.isShowing()) {
+                                            dialog.dismiss();
+                                        }
                                     }
                                 });
+
+                    } catch (Exception e) {
+                        // Handle any unexpected errors
+                        Toast.makeText(context, "An error occurred: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.e("CategoryDialog", "Error updating category", e);
+                    }
                 } else {
                     Toast.makeText(context, "Enter the category name", Toast.LENGTH_SHORT).show();
                 }

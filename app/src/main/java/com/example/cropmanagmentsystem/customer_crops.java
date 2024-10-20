@@ -1,6 +1,5 @@
 package com.example.cropmanagmentsystem;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,16 +7,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-
-import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link admin_orders_freg#newInstance} factory method to
+ * Use the {@link customer_crops#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class admin_orders_freg extends Fragment {
+public class customer_crops extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,7 +24,7 @@ public class admin_orders_freg extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public admin_orders_freg() {
+    public customer_crops() {
         // Required empty public constructor
     }
 
@@ -38,11 +34,11 @@ public class admin_orders_freg extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment admin_orders_freg.
+     * @return A new instance of fragment customer_crops.
      */
     // TODO: Rename and change types and number of parameters
-    public static admin_orders_freg newInstance(String param1, String param2) {
-        admin_orders_freg fragment = new admin_orders_freg();
+    public static customer_crops newInstance(String param1, String param2) {
+        customer_crops fragment = new customer_crops();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -63,23 +59,6 @@ public class admin_orders_freg extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_admin_orders_freg, container, false);
-        Button b=v.findViewById(R.id.logout);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout();
-            }
-        });
-        return v;
+        return inflater.inflate(R.layout.fragment_customer_crops, container, false);
     }
-
-    // Logout function
-    private void logout() {
-        FirebaseAuth.getInstance().signOut(); // Sign out the user
-        Intent intent = new Intent(getActivity(), login.class); // Redirect to login
-        startActivity(intent);
-        getActivity().finish(); // Close the customer activity and all associated fragments
-    }
-
 }

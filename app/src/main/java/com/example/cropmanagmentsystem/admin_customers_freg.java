@@ -117,7 +117,9 @@ public class admin_customers_freg extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Failed to fetch data", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "Failed to fetch data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Failed to fetch data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
         });
     }
