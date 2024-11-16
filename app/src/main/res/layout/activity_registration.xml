@@ -24,6 +24,7 @@
         android:src="@drawable/cloverk5" />
 
 
+
     <ImageView
         android:layout_width="@dimen/_100sdp"
         android:layout_height="@dimen/_190sdp"
@@ -234,6 +235,15 @@
             android:text="LOGIN"
             android:id="@+id/btnRegLogin"
             android:textSize="15sp"/>
+        <!-- Add your custom progress bar layout here -->
+        <include
+            android:id="@+id/customProgressBar"
+            layout="@layout/custom_progressbar_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
     </LinearLayout>
 
 

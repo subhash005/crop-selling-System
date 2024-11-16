@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="#E8F5E9"> <!-- Light green background -->
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add to Cart"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#388E3C" /> <!-- Darker green -->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_edittext_background"
+        android:layout_marginTop="12dp">
+        <ImageView
+            android:id="@+id/customer_cart_dialog_crop_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/leaf2k3" />
+    </LinearLayout>
+
+    <!-- Crop Name Label -->
+    <TextView
+        android:id="@+id/customer_cart_dialog_crop_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Crop Name"
+        android:textSize="16sp"
+        android:textColor="#388E3C"
+        android:layout_marginTop="12dp" />
+
+    <!-- Quantity Input with Max Stock Info -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter quantity in kilograms (kg):"
+        android:textSize="16sp"
+        android:textColor="#388E3C"
+        android:layout_marginTop="12dp" />
+
+    <EditText
+        android:id="@+id/customer_cart_dialog_quantity_kg"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:inputType="number"
+        android:hint="Max: [Available Stock] kg"
+        android:textAlignment="center"
+        android:textColor="#1B5E20"
+        android:layout_gravity="center"
+        android:background="@drawable/custom_edittext_background"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:maxLines="1"
+        android:layout_marginTop="8dp" />
+
+    <!-- Total Price Display -->
+    <TextView
+        android:id="@+id/customer_cart_dialog_textView_total_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Total Price: Rs. 0.00"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_green_dark"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- Add to Cart Button -->
+    <Button
+        android:id="@+id/customer_cart_dialog_add_to_cart_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#388E3C"
+        android:text="Add to Cart"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"
+        android:textSize="16sp" />
+
+</LinearLayout>

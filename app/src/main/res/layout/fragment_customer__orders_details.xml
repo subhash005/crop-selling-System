@@ -5,13 +5,39 @@
     android:layout_height="match_parent"
     tools:context=".customer_OrdersDetails">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- Header Section -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Orders"
-        android:textStyle="bold"
-        android:layout_marginLeft="20dp"
-        android:textSize="55dp" />
+        android:layout_height="wrap_content"
+        android:background="#388E3C"
+        android:paddingVertical="16dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Orders"
+            android:textSize="32sp"
+            android:layout_marginTop="15dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#03A9F4"
+        android:paddingVertical="16dp"
+        android:layout_gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ON WORKING"
+            android:textAlignment="center"
+            android:textSize="32sp"
+            android:layout_marginTop="15dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </FrameLayout>

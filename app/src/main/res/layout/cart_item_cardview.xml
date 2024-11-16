@@ -1,0 +1,72 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="15dp"
+    android:elevation="4dp"
+    android:layout_gravity="center"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/cart_border_line">
+
+    <!-- Crop Image -->
+    <ImageView
+        android:id="@+id/customer_image_cart_item"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginEnd="12dp"
+        android:scaleType="centerCrop"
+        android:background="@color/white"
+        android:src="@drawable/wheat" /> <!-- Default image, replace with actual -->
+
+    <!-- Crop Details -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/customer_text_cart_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Crop Name"
+            android:textSize="18sp"
+            android:textColor="#2E7D32"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/customer_text_cart_item_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quantity: 0 kg"
+            android:textSize="14sp"
+            android:textColor="#757575"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/customer_text_cart_item_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price: Rs. 0"
+            android:textSize="14sp"
+            android:textColor="#757575"
+            android:layout_marginTop="2dp" />
+    </LinearLayout>
+
+    <!-- Remove Button -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </LinearLayout>
+    <ImageButton
+        android:id="@+id/customer_button_remove_item"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:src="@drawable/baseline_remove_24"
+        android:background="@drawable/cart_border_line"
+        android:scaleType="fitStart"
+        android:contentDescription="Remove Item" />
+</LinearLayout>

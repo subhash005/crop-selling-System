@@ -282,7 +282,6 @@
                             android:layout_weight="1"
                             android:text="address"
                             android:id="@+id/profile_addres"
-
                             android:textSize="16sp"
                             android:textColor="#5B5B5B"
                             android:textAlignment="viewEnd" />
@@ -355,6 +354,7 @@
                     <androidx.appcompat.widget.AppCompatButton
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/user_profile_edit"
                         android:layout_below="@id/profile_details"
                         android:layout_margin="34dp"
                         android:text="Edit profile"

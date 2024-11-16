@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -18,9 +17,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:minWidth="180dp"
             android:padding="12dp">
 
-            <!-- Large Crop Image -->
+            <!--  Crop Image -->
             <ImageView
                 android:id="@+id/crop_pic"
                 android:layout_width="match_parent"
@@ -82,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Price : Rs."
+                    android:text="Price per kg : Rs. "
                     android:textColor="@color/light_green_splash"
                     android:textSize="16sp" />
                 <TextView
@@ -104,7 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Stock : "
+                    android:text="Stock (KG) Left : "
                     android:textColor="@android:color/holo_red_dark"
                     android:textSize="16sp" />
                 <TextView

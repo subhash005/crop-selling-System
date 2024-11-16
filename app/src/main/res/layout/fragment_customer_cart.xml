@@ -1,17 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#E8F5E9"
     tools:context=".customer_cart">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- Header Section -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="CART"
-        android:textStyle="bold"
-        android:layout_marginLeft="20dp"
-        android:textSize="55dp"/>
+        android:layout_height="wrap_content"
+        android:background="#388E3C"
+        android:paddingVertical="16dp"
+        android:gravity="center_horizontal">
 
-</FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CART"
+            android:textSize="32sp"
+            android:layout_marginTop="15dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Cart Content Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- RecyclerView for Cart Items -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/customer_recycler_view_cart"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingBottom="8dp" />
+
+        <!-- Divider Line -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#BDBDBD"
+            android:layout_marginVertical="8dp" />
+
+        <!-- Total Price Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/text_total_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="Total Price: Rs. 0"
+                android:textSize="18sp"
+                android:textColor="#388E3C"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+
+        <!-- Buy Button -->
+        <Button
+            android:id="@+id/button_buy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Buy Now"
+            android:textAllCaps="true"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#388E3C"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:padding="12dp"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+</LinearLayout>
