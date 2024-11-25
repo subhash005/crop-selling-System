@@ -1,6 +1,26 @@
 package com.example.cropmanagmentsystem;
 
 public class Cart_Item_model {
+    private String cropId;
+    private String cropName;
+    private String cropImage;
+    private int quantity;
+    private double totalPrice;
+    private double pricePerKg; // Added for consistency with logic
+
+    public Cart_Item_model() {
+        // Default constructor required for Firebase
+    }
+
+    public Cart_Item_model(String cropId, String cropName, String cropImage, int quantity, double totalPrice, double pricePerKg) {
+        this.cropId = cropId;
+        this.cropName = cropName;
+        this.cropImage = cropImage;
+        this.quantity = quantity;
+        this.totalPrice = totalPrice;
+        this.pricePerKg = pricePerKg;
+    }
+
     public String getCropId() {
         return cropId;
     }
@@ -17,20 +37,20 @@ public class Cart_Item_model {
         this.cropName = cropName;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     public String getCropImage() {
         return cropImage;
     }
 
     public void setCropImage(String cropImage) {
         this.cropImage = cropImage;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public double getTotalPrice() {
@@ -41,17 +61,11 @@ public class Cart_Item_model {
         this.totalPrice = totalPrice;
     }
 
-    private String cropId, cropName, cropImage;
-    private int quantity;
-    private double totalPrice;
+    public double getPricePerKg() {
+        return pricePerKg;
+    }
 
-    public void CartModel() {}
-
-    public void CartModel(String cropId, String cropName, String cropImage, int quantity, double totalPrice) {
-        this.cropId = cropId;
-        this.cropName = cropName;
-        this.cropImage = cropImage;
-        this.quantity = quantity;
-        this.totalPrice = totalPrice;
+    public void setPricePerKg(double pricePerKg) {
+        this.pricePerKg = pricePerKg;
     }
 }

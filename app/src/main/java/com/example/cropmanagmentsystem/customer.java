@@ -2,6 +2,7 @@ package com.example.cropmanagmentsystem;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -14,8 +15,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.razorpay.PaymentResultListener;
 
-public class customer extends AppCompatActivity {
+public class customer extends AppCompatActivity implements PaymentResultListener {
 private BottomNavigationView bnView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,4 +63,33 @@ private BottomNavigationView bnView;
         // Commit the transaction
         ft.commit();
     }
+
+    @Override
+    public void onPaymentSuccess(String razorpayPaymentID) {
+        Toast.makeText(this, "Payment Successful!", Toast.LENGTH_SHORT).show();
+
+        // Notify the customer_cart fragment
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container_customer);
+        if (fragment instanceof customer_cart) {
+            // Pass both parameters: status and paymentMethod
+            ((customer_cart) fragment).updatePaymentStatus("Paid", "Online Payment");
+        }
+    }
+
+
+    @Override
+    public void onPaymentError(int code, String description) {
+        Toast.makeText(this, "Payment Failed: " + description, Toast.LENGTH_SHORT).show();
+
+        // Notify the customer_cart fragment
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container_customer);
+        if (fragment instanceof customer_cart) {
+            // Pass both parameters: status and paymentMethod
+            ((customer_cart) fragment).updatePaymentStatus("Payment Failed", "Online Payment");
+        }
+    }
+
+
+
+
 }

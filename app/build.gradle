@@ -49,10 +49,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     implementation 'androidx.cardview:cardview:1.0.0'
 
-    //for progress bar
-//    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
-
-
-
+    // razor pay
+    implementation 'com.razorpay:checkout:1.6.40'
 
 }
