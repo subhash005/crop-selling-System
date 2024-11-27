@@ -1,85 +1,134 @@
 package com.example.cropmanagmentsystem;
 
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link admin_orders_freg#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class admin_orders_freg extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RecyclerView rvOrders;
+    private Spinner spinnerSort;
+    private OrderAdapter orderAdapter;
+    private List<Order> ordersList = new ArrayList<>(); // List to display
+    private List<Order> allOrdersList = new ArrayList<>(); // Backup of all orders
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public admin_orders_freg() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment admin_orders_freg.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static admin_orders_freg newInstance(String param1, String param2) {
-        admin_orders_freg fragment = new admin_orders_freg();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_admin_orders_freg, container, false);
+
+        // Initialize views
+        spinnerSort = view.findViewById(R.id.spinnerSort);
+        rvOrders = view.findViewById(R.id.rvOrders);
+
+        // Set up RecyclerView
+        rvOrders.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Load orders from Firebase
+        loadOrdersFromFirebase();
+
+        // Set up Spinner adapter
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.sort_options_admin,
+                android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSort.setAdapter(adapter);
+
+        // Set default selection to "All Orders"
+        spinnerSort.setSelection(2); // Index 2 corresponds to "All Orders"
+
+        // Handle Spinner item selection
+        spinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    sortByHighestTotalAmount();
+                } else if (position == 1) {
+                    sortByNewestFirst();
+                } else if (position == 2) {
+                    showAllOrders();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Default to showing all orders
+                showAllOrders();
+            }
+        });
+
+        return view;
+    }
+
+    private void loadOrdersFromFirebase() {
+        FirebaseDatabase.getInstance().getReference("orders")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ordersList.clear();
+                        allOrdersList.clear();
+                        for (DataSnapshot orderSnapshot : snapshot.getChildren()) {
+                            Order order = orderSnapshot.getValue(Order.class);
+                            if (order != null) {
+                                ordersList.add(order); // Add to display list
+                                allOrdersList.add(order); // Add to backup list
+                            }
+                        }
+                        orderAdapter = new OrderAdapter(ordersList);
+                        rvOrders.setAdapter(orderAdapter);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(requireContext(), "Failed to load orders.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
+    private void sortByHighestTotalAmount() {
+        Collections.sort(ordersList, (o1, o2) -> Double.compare(o2.getTotalAmount(), o1.getTotalAmount()));
+        if (orderAdapter != null) {
+            orderAdapter.notifyDataSetChanged();
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_admin_orders_freg, container, false);
-        Button b=v.findViewById(R.id.logout);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout();
-            }
-        });
-        return v;
+    private void sortByNewestFirst() {
+        Collections.sort(ordersList, (o1, o2) -> Long.compare(o2.getOrderDateTime(), o1.getOrderDateTime()));
+        if (orderAdapter != null) {
+            orderAdapter.notifyDataSetChanged();
+        }
     }
 
-    // Logout function
-    private void logout() {
-        FirebaseAuth.getInstance().signOut(); // Sign out the user
-        Intent intent = new Intent(getActivity(), login.class); // Redirect to login
-        startActivity(intent);
-        getActivity().finish(); // Close the customer activity and all associated fragments
+    private void showAllOrders() {
+        ordersList.clear();
+        ordersList.addAll(allOrdersList); // Reset the list to all orders
+        if (orderAdapter != null) {
+            orderAdapter.notifyDataSetChanged();
+        }
     }
-
 }

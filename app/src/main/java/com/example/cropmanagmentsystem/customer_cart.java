@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,25 +57,71 @@ public class customer_cart extends Fragment {
         loadCartData();
 
         button_buy.setOnClickListener(v -> {
-            // Show a dialog to select payment method
-            new AlertDialog.Builder(requireContext())
-                    .setTitle("Select Payment Method")
-                    .setItems(new String[]{"Cash on Delivery", "Online Payment"}, (dialog, which) -> {
-                        if (which == 0) {
-                            // Cash on Delivery selected
-                            updatePaymentStatus("Not Paid", "Cash on Delivery");
-                        } else {
-                            // Online Payment selected
-                            PaymentNow();
-                        }
-                    })
-                    .show();
+            // Iterate over the cart items to check stock availability
+            for (Cart_Item_model cartItem : cartList) {
+                String cropName = cartItem.getCropName();
+                int cartQuantity = cartItem.getQuantity();
+
+                // Check the stock in Firebase for the crop
+                checkStockAvailability(cropName, cartQuantity);
+            }
         });
 
-
-
-
         return view;
+    }
+    private void checkStockAvailability(String cropName, int cartQuantity) {
+        DatabaseReference cropsRef = FirebaseDatabase.getInstance().getReference("Crops");
+
+        cropsRef.orderByChild("crop_name").equalTo(cropName).get().addOnSuccessListener(dataSnapshot -> {
+            if (dataSnapshot.exists()) {
+                for (DataSnapshot cropSnapshot : dataSnapshot.getChildren()) {
+                    int cropStock = cropSnapshot.child("crop_stock").getValue(int.class);
+
+                    // If the cart quantity is less than or equal to the available stock
+                    if (cartQuantity <= cropStock) {
+                        // Proceed with the payment if all items are in stock
+                        processPayment();
+                        updateCropStock(cropSnapshot.getKey(), cropStock - cartQuantity); // Decrease the stock
+                        return;
+                    } else {
+                        // If stock is insufficient for any cart item
+                        Toast.makeText(getContext(), "Insufficient stock for " + cropName, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+            } else {
+                Log.d("StockCheck", "No crop found with name: " + cropName);
+            }
+        }).addOnFailureListener(e -> {
+            Log.e("StockCheck", "Failed to fetch crop details", e);
+        });
+    }
+
+    private void processPayment() {
+        // Proceed with the payment process (same as in your existing code)
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Select Payment Method")
+                .setItems(new String[]{"Cash on Delivery", "Online Payment"}, (dialog, which) -> {
+                    if (which == 0) {
+                        // Cash on Delivery selected
+                        updatePaymentStatus("Not Paid", "Cash on Delivery");
+                    } else {
+                        // Online Payment selected
+                        PaymentNow();
+                    }
+                })
+                .show();
+    }
+
+    private void updateCropStock(String cropId, int newStock) {
+        DatabaseReference cropsRef = FirebaseDatabase.getInstance().getReference("Crops").child(cropId);
+
+        // Update the crop stock in Firebase
+        cropsRef.child("crop_stock").setValue(newStock).addOnSuccessListener(aVoid -> {
+            Log.d("StockUpdate", "Stock updated successfully for crop ID: " + cropId);
+        }).addOnFailureListener(e -> {
+            Log.e("StockUpdate", "Failed to update stock for crop ID: " + cropId, e);
+        });
     }
 
     private void loadCartData() {
@@ -95,8 +142,50 @@ public class customer_cart extends Fragment {
 
             total_price.setText("Total: Rs. " + String.format("%.2f", totalPrice));
             cartRecycleViewAdapter.notifyDataSetChanged();
+
+            // Log the cart item quantities
+//            logCartQuantities();
         });
     }
+//    private void logCartQuantities() {
+//        for (Cart_Item_model cartItem : cartList) {
+//            double quantity = cartItem.getQuantity(); // Assuming `getQuantity()` returns the quantity
+//            String cropName = cartItem.getCropName(); // Optional: Log the crop name for clarity
+//            // Log the quantity
+//            Log.d("CartItem", "Crop: " + cropName + ", Quantity: " + quantity);
+//
+//            getCropDetails(cropName); // Fetch and log crop details
+//
+//        }
+//    }
+//    private void getCropDetails(String cropName) {
+//        DatabaseReference cropsRef = FirebaseDatabase.getInstance().getReference("Crops");
+//
+//        // Query the database for the crop with the given name
+//        cropsRef.orderByChild("crop_name").equalTo(cropName).get().addOnSuccessListener(dataSnapshot -> {
+//            if (dataSnapshot.exists()) {
+//                for (DataSnapshot cropSnapshot : dataSnapshot.getChildren()) {
+//                    // Get crop details
+//                    String name = cropSnapshot.child("crop_name").getValue(String.class);
+//                    String category = cropSnapshot.child("crop_category").getValue(String.class);
+//                    int crop_stock = cropSnapshot.child("crop_stock").getValue(int.class);
+//                    double price = cropSnapshot.child("crop_price").getValue(Double.class);
+//
+//                    // Log or use the details
+//                    Log.d("CropDetails", "Name: " + name);
+//                    Log.d("CropDetails", "Category: " + category);
+//                    Log.d("CropDetails", "Description: " + crop_stock);
+//                    Log.d("CropDetails", "Price: Rs. " + price);
+//                }
+//            } else {
+//                Log.d("CropDetails", "No crop found with name: " + cropName);
+//            }
+//        }).addOnFailureListener(e -> {
+//            Log.e("CropDetails", "Failed to fetch crop details", e);
+//        });
+//    }
+
+
 
     private void PaymentNow() {
         Checkout checkout = new Checkout();
@@ -148,45 +237,55 @@ public class customer_cart extends Fragment {
         DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("orders");
         String orderId = ordersRef.push().getKey(); // Generate a unique order ID
 
-        // User details (you can fetch these from Firebase Authentication or a separate database)
-        String userName = "John Doe"; // Replace with actual user name
-        String userNumber = "585858"; // Replace with actual user number
-        String deliveryAddress = "123 Main St, City, Country"; // Replace with actual user address
+        // Fetch user details from Firebase
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("user").child(userId);
 
-        // Build the cart items list
-        List<Map<String, Object>> cartItems = new ArrayList<>();
-        for (Cart_Item_model cartItem : cartList) {
-            Map<String, Object> item = new HashMap<>();
-            item.put("cropName", cartItem.getCropName());
-            item.put("cropImage", cartItem.getCropImage());
-            item.put("quantity", cartItem.getQuantity());
-            item.put("pricePerKg", cartItem.getPricePerKg());
-            item.put("totalPrice", cartItem.getTotalPrice());
-            cartItems.add(item);
-        }
+        userRef.get().addOnSuccessListener(dataSnapshot -> {
+            if (dataSnapshot.exists()) {
+                String userName = dataSnapshot.child("userName").getValue(String.class); // User's name
+                String userNumber = dataSnapshot.child("number").getValue(String.class); // User's phone number
+                String deliveryAddress = dataSnapshot.child("address").getValue(String.class); // User's delivery address
 
-        // Build the order details map
-        Map<String, Object> orderDetails = new HashMap<>();
-        orderDetails.put("userId", userId);
-        orderDetails.put("userName", userName);
-        orderDetails.put("userNumber", userNumber);
-        orderDetails.put("deliveryAddress", deliveryAddress);
-        orderDetails.put("cartItems", cartItems);
-        orderDetails.put("totalAmount", totalPrice);
-        orderDetails.put("paymentMethod", paymentMethod);
-        orderDetails.put("paymentStatus", paymentStatus);
-        orderDetails.put("orderDateTime", System.currentTimeMillis());
-        orderDetails.put("deliveryStatus", "Pending");
+                // Build the cart items list
+                List<Map<String, Object>> cartItems = new ArrayList<>();
+                for (Cart_Item_model cartItem : cartList) {
+                    Map<String, Object> item = new HashMap<>();
+                    item.put("cropName", cartItem.getCropName());
+                    item.put("cropImage", cartItem.getCropImage());
+                    item.put("quantity", cartItem.getQuantity());
+                    item.put("pricePerKg", cartItem.getPricePerKg());
+                    item.put("totalPrice", cartItem.getTotalPrice());
+                    cartItems.add(item);
+                }
 
-        // Save the order in Firebase
-        if (orderId != null) {
-            ordersRef.child(orderId).setValue(orderDetails).addOnSuccessListener(aVoid -> {
-                Toast.makeText(getContext(), "Order placed successfully!", Toast.LENGTH_SHORT).show();
-                clearCart(); // Clear the cart after order placement
-            }).addOnFailureListener(e -> {
-                Toast.makeText(getContext(), "Failed to record order. Please try again.", Toast.LENGTH_SHORT).show();
-            });
-        }
+                // Build the order details map
+                Map<String, Object> orderDetails = new HashMap<>();
+                orderDetails.put("userId", userId);
+                orderDetails.put("userName", userName);
+                orderDetails.put("userNumber", userNumber);
+                orderDetails.put("deliveryAddress", deliveryAddress);
+                orderDetails.put("cartItems", cartItems);
+                orderDetails.put("totalAmount", totalPrice);
+                orderDetails.put("paymentMethod", paymentMethod);
+                orderDetails.put("paymentStatus", paymentStatus);
+                orderDetails.put("orderDateTime", System.currentTimeMillis());
+                orderDetails.put("deliveryStatus", "Pending");
+
+                // Save the order in Firebase
+                if (orderId != null) {
+                    ordersRef.child(orderId).setValue(orderDetails).addOnSuccessListener(aVoid -> {
+                        Toast.makeText(getContext(), "Order placed successfully!", Toast.LENGTH_SHORT).show();
+                        clearCart(); // Clear the cart after order placement
+                    }).addOnFailureListener(e -> {
+                        Toast.makeText(getContext(), "Failed to record order. Please try again.", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            } else {
+                Log.e("UserDetails", "User details not found in database");
+            }
+        }).addOnFailureListener(e -> {
+            Log.e("UserDetails", "Failed to fetch user details", e);
+        });
     }
 
 

@@ -86,12 +86,15 @@ public class registration extends AppCompatActivity {
                 String number = Number_reg.getText().toString();
                 String password = Password_reg.getText().toString();
 
-                if (TextUtils.isEmpty(username) || TextUtils.isEmpty(email) || TextUtils.isEmpty(adress) || TextUtils.isEmpty(number)) {
-                    Toast.makeText(registration.this, "Please fill the form", Toast.LENGTH_SHORT).show();
+                // Validate form fields
+                if (TextUtils.isEmpty(username) || TextUtils.isEmpty(email) || TextUtils.isEmpty(adress) || TextUtils.isEmpty(number) || TextUtils.isEmpty(password)) {
+                    Toast.makeText(registration.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
                 } else if (!email.matches(emailPattern)) {
-                    Email_reg.setError("Enter the valid email");
+                    Email_reg.setError("Enter a valid email");
+                } else if (number.length() != 10 || !number.matches("\\d{10}")) { // Validate phone number (simple 10-digit check)
+                    Number_reg.setError("Enter a valid 10-digit phone number");
                 } else if (password.length() < 6) {
-                    Password_reg.setError("Increase the length of password");
+                    Password_reg.setError("Password must be at least 6 characters");
                 } else {
 
                     // Show the progress bar

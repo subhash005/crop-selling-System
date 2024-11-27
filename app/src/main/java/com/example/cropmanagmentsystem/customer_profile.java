@@ -96,14 +96,20 @@ public class customer_profile extends Fragment {
 
                     // Get and set profile image from Firebase Storage
                     String profileImageUrl = snapshot.child("profilepic").getValue(String.class);
-                    if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
-                        Glide.with(getActivity())
-                                .load(profileImageUrl)
-                                .circleCrop()  // This makes the image circular
-                                .into(imageView_profile);
+
+                    // Check if the fragment is attached before using Glide
+                    if (getActivity() != null && isAdded()) {
+                        if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+                            Glide.with(getActivity())
+                                    .load(profileImageUrl)
+                                    .circleCrop()  // This makes the image circular
+                                    .into(imageView_profile);
+                        } else {
+                            imageView_profile.setImageResource(R.drawable.b);
+                            Toast.makeText(getActivity(), "Image is not loaded", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
-                        imageView_profile.setImageResource(R.drawable.b);
-                        Toast.makeText(getActivity(), "image is not loaded", Toast.LENGTH_SHORT).show();
+                        Log.e("FragmentError", "Fragment is not attached to activity, skipping Glide image loading");
                     }
                 }
 
@@ -187,15 +193,33 @@ public class customer_profile extends Fragment {
         user.reauthenticate(credential).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 // Proceed with updating email and password
+                user.updateEmail(email).addOnCompleteListener(emailTask -> {
+                    if (emailTask.isSuccessful()) {
+                        Toast.makeText(getActivity(), "Email updated successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.e("ReauthenticationError", "Error updating email: " + emailTask.getException().getMessage());
+                    }
+                });
+
+                user.updatePassword(password).addOnCompleteListener(passwordTask -> {
+                    if (passwordTask.isSuccessful()) {
+                        Toast.makeText(getActivity(), "Password updated successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.e("ReauthenticationError", "Error updating password: " + passwordTask.getException().getMessage());
+                    }
+                });
+
             } else {
-                // Log the error to understand the issue
-                Log.e("ReauthenticationError", "Error: " + task.getException().getMessage());
+                if (task.getException() != null) {
+                    Log.e("ReauthenticationError", "Error: " + task.getException().getMessage());
+                } else {
+                    Log.e("ReauthenticationError", "Unknown error occurred during reauthentication.");
+                }
                 Toast.makeText(getActivity(), "Reauthentication failed", Toast.LENGTH_SHORT).show();
             }
         });
 
     }
-
 
     private void uploadImageToFirebase(String userId, String username, String email, String address, String number, String password) {
         StorageReference storageRef = FirebaseStorage.getInstance().getReference("profile_pics").child(userId + ".jpg");
@@ -214,9 +238,6 @@ public class customer_profile extends Fragment {
                         ref.child("number").setValue(number);
                         ref.child("password").setValue(password);
 
-
-
-
                         // Show a success message
                         Toast.makeText(getActivity(), "Profile image updated successfully", Toast.LENGTH_SHORT).show();
                     });
@@ -227,28 +248,19 @@ public class customer_profile extends Fragment {
                 });
     }
 
-
     private void chooseImage() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
+        Intent intent = new Intent();
         intent.setType("image/*");
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Profile Image"), PICK_IMAGE_REQUEST);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
-
-            // Ensure that choose_image_newProfile is initialized
-            if (choose_image_newProfile != null) {
-                Glide.with(getActivity())
-                        .load(imageUri)  // Load the selected image URI
-                        .circleCrop()    // This makes the image circular
-                        .into(choose_image_newProfile);
-            } else {
-                Log.e("Image Load Error", "choose_image_newProfile is null.");
-            }
+            choose_image_newProfile.setImageURI(imageUri); // Set the selected image to the CircleImageView
         }
     }
 }

@@ -2,4 +2,18 @@
     <string name="app_name">cropManagmentSystem</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="sort_options">
+        <item>All Orders</item> <!-- Default option -->
+        <item>Highest Amount of Order</item>
+        <item>Newest Order</item>
+    </string-array>
+
+    <string-array name="sort_options_admin">
+        <item>Highest Total Amount</item>
+        <item>Newest First</item>
+        <item>All Orders</item>
+    </string-array>
+
+
 </resources>

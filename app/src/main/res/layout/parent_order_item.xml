@@ -24,7 +24,6 @@
             android:orientation="vertical"
             android:padding="8dp">
 
-<!--            &lt;!&ndash; Order ID &ndash;&gt;-->
             <TextView
                 android:id="@+id/tvOrderId"
                 android:layout_width="wrap_content"
@@ -34,7 +33,7 @@
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
                 android:layout_marginBottom="4dp"
-                android:visibility="gone"/>
+                />
 
             <!-- User Name -->
             <TextView
@@ -112,6 +111,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Delivery Status: ----"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cart Items : "
                 android:textSize="16sp"
                 android:textColor="@android:color/black"
                 android:layout_marginBottom="4dp" />

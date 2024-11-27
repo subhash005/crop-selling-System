@@ -17,6 +17,9 @@
         android:theme="@style/Theme.CropManagmentSystem"
         tools:targetApi="31">
         <activity
+            android:name=".UserMessageActivity"
+            android:exported="false" />
+        <activity
             android:name=".custom_progressbar_layout"
             android:exported="false" />
         <activity
@@ -40,10 +43,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
-
         <activity
             android:name=".MainActivity"
             android:exported="false" />

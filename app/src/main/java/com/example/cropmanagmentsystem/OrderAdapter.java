@@ -1,5 +1,6 @@
 package com.example.cropmanagmentsystem;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         Order order = orders.get(position);
+        Log.d("OrderAdapter", "Order ID: " + order.getOrderId());  // Add this line to debug
         holder.tvOrderId.setText("Order ID: " + order.getOrderId());
         holder.tvUserName.setText("Name: " + order.getUserName());
         holder.tvUserNumber.setText("Phone: " + order.getUserNumber());

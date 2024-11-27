@@ -35,6 +35,8 @@ public class Admin extends AppCompatActivity {
                     load_admin_freg(new admin_addCrop_freg(),false);
                 } else if (id==R.id.nav_customers_admin) {
                     load_admin_freg(new admin_customers_freg(),false);
+                } else if (id==R.id.nav_profile_admin) {
+                    load_admin_freg(new customer_profile(),false);
                 } else {
                     //for order details
                     load_admin_freg(new admin_orders_freg(),true);
