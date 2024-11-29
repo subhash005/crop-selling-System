@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -31,6 +32,7 @@ public class admin_home_freg extends Fragment {
 
     // Spinner for Category selection
     private Spinner spinnerCategory;
+    private TextView noCropsMessage;  // TextView to show when no crops are available
 
     private RecyclerView recyclerView_categorydata;
     private category_adapter category_adapter;
@@ -47,8 +49,9 @@ public class admin_home_freg extends Fragment {
         recyclerView_cropdata.setAdapter(adminCropRecyclerAdapter);
         loadCropData();
 
-        // Initialize Spinner
+        // Initialize Spinner and TextView for no crops message
         spinnerCategory = view.findViewById(R.id.spinner_category);
+        noCropsMessage = view.findViewById(R.id.no_crops_message);
 
         // 2nd RecyclerView for Categories
         recyclerView_categorydata = view.findViewById(R.id.recyclerView_categorydata);
@@ -77,25 +80,28 @@ public class admin_home_freg extends Fragment {
                     }
                 }
 
-                ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(getActivity(),
-                        android.R.layout.simple_spinner_item, categoryNames);
-                categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinnerCategory.setAdapter(categoryAdapter);
+                // Ensure we have a valid context before creating the ArrayAdapter
+                if (getActivity() != null) {
+                    ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(getActivity(),
+                            android.R.layout.simple_spinner_item, categoryNames);
+                    categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerCategory.setAdapter(categoryAdapter);
 
-                // Set Spinner item selection listener to filter crops
-                spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                        String selectedCategory = parentView.getItemAtPosition(position).toString();
-                        Log.d("Category", "Selected Category: " + selectedCategory); // Debugging log
-                        filterCropsByCategory(selectedCategory);
-                    }
+                    // Set Spinner item selection listener to filter crops
+                    spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                            String selectedCategory = parentView.getItemAtPosition(position).toString();
+                            Log.d("Category", "Selected Category: " + selectedCategory); // Debugging log
+                            filterCropsByCategory(selectedCategory);
+                        }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parentView) {
-                        // Do nothing
-                    }
-                });
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parentView) {
+                            // Do nothing
+                        }
+                    });
+                }
             }
 
             @Override
@@ -146,8 +152,16 @@ public class admin_home_freg extends Fragment {
             }
         }
 
+        // Check if any crops were found
+        if (filteredCropList.isEmpty()) {
+            // Show the "No crops available" message
+            noCropsMessage.setVisibility(View.VISIBLE);
+        } else {
+            // Hide the "No crops available" message
+            noCropsMessage.setVisibility(View.GONE);
+        }
+
         // Update the RecyclerView with filtered data
         adminCropRecyclerAdapter.notifyDataSetChanged();
     }
-
 }
