@@ -2,24 +2,23 @@ package com.example.cropmanagmentsystem;
 
 import java.util.List;
 
-public class Order {
-    private String orderId, userId, userName, userNumber, deliveryAddress, paymentMethod, paymentStatus, deliveryStatus;
+public class AdminOrder {
+    private String orderID, userId, userName, userNumber, deliveryAddress, paymentMethod, paymentStatus, deliveryStatus;
     private long orderDateTime;
     private int totalAmount;
-    private List<CartItem> cartItems;
+    private List<AdminCartItem> cartItems;
     private String paymentID;
-    private String paymentDateTime;  // Changed to String to handle both date and "NA"
+    private String paymentDateTime;
     private String orderMonth;
     private String orderYear;
 
-    public Order() {
+    // Constructors, getters, setters
+
+    public AdminOrder() {
     }
 
-    // Constructor
-    public Order(String orderId, String userId, String userName, String userNumber, String deliveryAddress, String paymentMethod,
-                 String paymentStatus, String deliveryStatus, long orderDateTime, int totalAmount, List<CartItem> cartItems,
-                 String paymentID, String paymentDateTime, String orderMonth, String orderYear) {
-        this.orderId = orderId;
+    public AdminOrder(String orderID, String userId, String userName, String userNumber, String deliveryAddress, String paymentMethod, String paymentStatus, String deliveryStatus, long orderDateTime, int totalAmount, List<AdminCartItem> cartItems, String paymentID, String paymentDateTime, String orderMonth, String orderYear) {
+        this.orderID = orderID;
         this.userId = userId;
         this.userName = userName;
         this.userNumber = userNumber;
@@ -36,22 +35,12 @@ public class Order {
         this.orderYear = orderYear;
     }
 
-    // Getters and setters...
-
-    public String getPaymentDateTime() {
-        return paymentDateTime;
+    public String getOrderID() {
+        return orderID;
     }
 
-    public void setPaymentDateTime(String paymentDateTime) {
-        this.paymentDateTime = paymentDateTime;
-    }
-
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setOrderID(String orderID) {
+        this.orderID = orderID;
     }
 
     public String getUserId() {
@@ -126,11 +115,11 @@ public class Order {
         this.totalAmount = totalAmount;
     }
 
-    public List<CartItem> getCartItems() {
+    public List<AdminCartItem> getCartItems() {
         return cartItems;
     }
 
-    public void setCartItems(List<CartItem> cartItems) {
+    public void setCartItems(List<AdminCartItem> cartItems) {
         this.cartItems = cartItems;
     }
 
@@ -140,6 +129,14 @@ public class Order {
 
     public void setPaymentID(String paymentID) {
         this.paymentID = paymentID;
+    }
+
+    public String getPaymentDateTime() {
+        return paymentDateTime;
+    }
+
+    public void setPaymentDateTime(String paymentDateTime) {
+        this.paymentDateTime = paymentDateTime;
     }
 
     public String getOrderMonth() {
@@ -157,6 +154,5 @@ public class Order {
     public void setOrderYear(String orderYear) {
         this.orderYear = orderYear;
     }
-
-    // Other getters and setters...
 }
+

@@ -32,6 +32,7 @@ public class customer_OrdersDetails extends Fragment {
     private Spinner spinnerSort;
     private OrderAdapter orderAdapter;
     private List<Order> ordersList = new ArrayList<>();
+    private List<Order> filteredOrdersList = new ArrayList<>();  // List to hold filtered orders
     private String currentUserId;
 
     @Nullable
@@ -55,7 +56,7 @@ public class customer_OrdersDetails extends Fragment {
         // Set up Spinner adapter
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 requireContext(),
-                R.array.sort_options,
+                R.array.sort_options_admin,
                 android.R.layout.simple_spinner_item
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -74,6 +75,12 @@ public class customer_OrdersDetails extends Fragment {
                         break;
                     case 2: // "Newest First"
                         sortByNewestFirst();
+                        break;
+                    case 3: // "Paid Orders"
+                        displayPaidOrders();
+                        break;
+                    case 4: // "Not Paid Orders"
+                        displayNotPaidOrders();
                         break;
                 }
             }
@@ -105,6 +112,8 @@ public class customer_OrdersDetails extends Fragment {
                             if (order != null) {
                                 // Set the orderId in the Order object
                                 order.setOrderId(orderId);
+                                Log.d("Orders", "Order Date Time: " + order.getOrderDateTime());
+                                Log.d("OrderAdapter", "Payment Date Time (raw): " + order.getPaymentDateTime());  // Log the raw value
 
                                 // Optionally check for userId if you want to filter
                                 if (order.getUserId().equals(currentUserId)) {
@@ -112,8 +121,15 @@ public class customer_OrdersDetails extends Fragment {
                                 }
                             }
                         }
-                        orderAdapter = new OrderAdapter(ordersList);
-                        rvOrders.setAdapter(orderAdapter);
+                        filteredOrdersList.addAll(ordersList);  // Initially, all orders are shown
+
+                        // Initialize the adapter only after data is loaded
+                        if (orderAdapter == null) {
+                            orderAdapter = new OrderAdapter(filteredOrdersList);
+                            rvOrders.setAdapter(orderAdapter);
+                        } else {
+                            orderAdapter.notifyDataSetChanged();  // Notify adapter if already set
+                        }
                     }
 
                     @Override
@@ -123,27 +139,64 @@ public class customer_OrdersDetails extends Fragment {
                 });
     }
 
-
-
-
     private void displayAllOrders() {
-        // No sorting applied, just notify the adapter
+        filteredOrdersList.clear();
+        filteredOrdersList.addAll(ordersList);  // Restore the full list
+
+        // Ensure the adapter is set before notifying
         if (orderAdapter != null) {
             orderAdapter.notifyDataSetChanged();
         }
     }
 
     private void sortByHighestTotalAmount() {
-        Collections.sort(ordersList, (o1, o2) -> Double.compare(o2.getTotalAmount(), o1.getTotalAmount()));
+        Collections.sort(filteredOrdersList, (o1, o2) -> Double.compare(o2.getTotalAmount(), o1.getTotalAmount()));
+
+        // Ensure the adapter is set before notifying
         if (orderAdapter != null) {
             orderAdapter.notifyDataSetChanged();
         }
     }
 
     private void sortByNewestFirst() {
-        Collections.sort(ordersList, (o1, o2) -> Long.compare(o2.getOrderDateTime(), o1.getOrderDateTime()));
+        Collections.sort(filteredOrdersList, (o1, o2) -> Long.compare(o2.getOrderDateTime(), o1.getOrderDateTime()));
+
+        // Ensure the adapter is set before notifying
         if (orderAdapter != null) {
             orderAdapter.notifyDataSetChanged();
         }
     }
+
+    private void displayPaidOrders() {
+        List<Order> paidOrders = new ArrayList<>();
+        for (Order order : ordersList) {
+            if ("Paid".equalsIgnoreCase(order.getPaymentStatus())) {
+                paidOrders.add(order);
+            }
+        }
+        filteredOrdersList.clear();
+        filteredOrdersList.addAll(paidOrders);
+
+        // Ensure the adapter is set before notifying
+        if (orderAdapter != null) {
+            orderAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void displayNotPaidOrders() {
+        List<Order> notPaidOrders = new ArrayList<>();
+        for (Order order : ordersList) {
+            if (!"Paid".equalsIgnoreCase(order.getPaymentStatus())) {
+                notPaidOrders.add(order);
+            }
+        }
+        filteredOrdersList.clear();
+        filteredOrdersList.addAll(notPaidOrders);
+
+        // Ensure the adapter is set before notifying
+        if (orderAdapter != null) {
+            orderAdapter.notifyDataSetChanged();
+        }
+    }
+
 }

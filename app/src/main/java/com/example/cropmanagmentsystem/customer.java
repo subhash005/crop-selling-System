@@ -65,17 +65,18 @@ private BottomNavigationView bnView;
     }
 
     @Override
-    public void onPaymentSuccess(String razorpayPaymentID) {
-        Toast.makeText(this, "Payment Successful!", Toast.LENGTH_SHORT).show();
+    public void onPaymentSuccess(String paymentID) {
+        String paymentStatus = "Paid";
+        String paymentMethod = "Online Payment";
+        String paymentDateTime = String.valueOf(System.currentTimeMillis());
 
-        // Notify the customer_cart fragment
+        // Find the customer_cart fragment and call updatePaymentStatus
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container_customer);
         if (fragment instanceof customer_cart) {
-            // Pass both parameters: status and paymentMethod
-            ((customer_cart) fragment).updatePaymentStatus("Paid", "Online Payment");
+            // Call the updatePaymentStatus method in the customer_cart fragment
+            ((customer_cart) fragment).updatePaymentStatus(paymentStatus, paymentMethod, paymentDateTime, paymentID);
         }
     }
-
 
     @Override
     public void onPaymentError(int code, String description) {
@@ -84,10 +85,11 @@ private BottomNavigationView bnView;
         // Notify the customer_cart fragment
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container_customer);
         if (fragment instanceof customer_cart) {
-            // Pass both parameters: status and paymentMethod
-            ((customer_cart) fragment).updatePaymentStatus("Payment Failed", "Online Payment");
+            // Call the updatePaymentStatus method in the customer_cart fragment
+            ((customer_cart) fragment).updatePaymentStatus("Payment Failed", "Online Payment", "", "");
         }
     }
+
 
 
 

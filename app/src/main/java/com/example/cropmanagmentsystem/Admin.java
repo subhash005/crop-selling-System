@@ -6,9 +6,6 @@ import android.view.MenuItem;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -39,7 +36,7 @@ public class Admin extends AppCompatActivity {
                     load_admin_freg(new customer_profile(),false);
                 } else {
                     //for order details
-                    load_admin_freg(new admin_orders_freg(),true);
+                    load_admin_freg(new AdminOrderFragment(),true);
                 }
                 return true;
             }
