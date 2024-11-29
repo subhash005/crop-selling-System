@@ -1,54 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
     tools:context=".admin_home_freg">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:scrollbars="vertical">
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="28dp"
+        android:paddingBottom="16dp">
 
+        <!-- Categories Title -->
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/categoriesTitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:layout_marginRight="19dp"
-            android:textSize="37sp"
-            android:textStyle="bold"
+            android:text="Categories"
+            android:textSize="34sp"
             android:textColor="#007E2F"
+            android:textStyle="bold"
             android:fontFamily="@font/spartan_bold"
-            android:text="   Categories"/>
-        <!-- Second RecyclerView -->
+            android:layout_marginBottom="8dp" />
+
+        <!-- Categories RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:id="@+id/recyclerView_categorydata"
-            android:scrollbars="vertical"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:scrollbars="vertical" />
+
+        <!-- Crops Title -->
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/cropsTitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="19dp"
-            android:textSize="37sp"
-            android:textStyle="bold"
+            android:text="Crops"
+            android:textSize="34sp"
             android:textColor="#007E2F"
-            android:fontFamily="@font/spartan_bold"
-            android:text="   Crops "/>
-        <androidx.recyclerview.widget.RecyclerView
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Spinner for Category Selection -->
+        <Spinner
+            android:id="@+id/spinner_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginBottom="16dp"
+            android:spinnerMode="dropdown"
+            android:minHeight="48dp" />
+
+        <!-- Crops RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView_cropdata"
-            android:scrollbars="vertical"/>
-
-
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 
-
-
-
-</RelativeLayout>
+</androidx.core.widget.NestedScrollView>

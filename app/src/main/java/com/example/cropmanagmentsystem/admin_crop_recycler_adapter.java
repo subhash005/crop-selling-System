@@ -242,6 +242,12 @@ public class admin_crop_recycler_adapter extends RecyclerView.Adapter<admin_crop
         return cropList.size();
     }
 
+    public void updateCropList(List<crops_model> updatedList) {
+        this.cropList = updatedList;
+        notifyDataSetChanged();
+    }
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView crop_pic;
         TextView crop_name ,crop_category,crop_description,crop_price,crop_stock,crop_isOrganic;

@@ -52,49 +52,7 @@ public class category_adapter extends RecyclerView.Adapter<category_adapter.View
         });
     }
 
-//    private void showCategoryDailog(Category category) {
-//        View dailogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_category,null);
-//        AlertDialog.Builder builder =new AlertDialog.Builder(context);
-//        builder.setView(dailogView);
-//        AlertDialog dialog=builder.create();
-//        dialog.show();
-//
-//
-//        EditText edit_category_name = dailogView.findViewById(R.id.edit_category_name);
-//        Button btn_update_category=dailogView.findViewById(R.id.btn_update_category);
-//        Button btn_delete_category = dailogView.findViewById(R.id.btn_delete_category);
-//
-//        edit_category_name.setText(category.getCategoryName());
-//
-//
-//        btn_update_category.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String newCategoryName =edit_category_name.getText().toString();
-//                if(!newCategoryName.isEmpty()){
-//                    DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("categories").child(category.getCategoryId());
-//                    categoryRef.child("categoryName").setValue(newCategoryName);
-//                    dialog.dismiss();
-//                    Toast.makeText(context, "Category Name is Upadted", Toast.LENGTH_SHORT).show();
-//                }else {
-//                    Toast.makeText(context, "Enter the Category Name", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-//
-//        btn_delete_category.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("categories").child(category.getCategoryId());
-//                categoryRef.removeValue();
-//                dialog.dismiss();
-//                Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//
-//
-//    }
+
 
 
     private void showCategoryDailog(Category category) {
