@@ -19,6 +19,31 @@
         <item>Unpaid Orders</item> <!-- New option for Unpaid Orders -->
     </string-array>
 
+    <string-array name="months_array">
+        <item>All Months</item>
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+
+    <!-- Years array -->
+    <string-array name="years_array">
+        <item>All Years</item>
+        <item>2022</item>
+        <item>2023</item>
+        <item>2024</item>
+        <item>2025</item>
+    </string-array>
+
 
 
 </resources>

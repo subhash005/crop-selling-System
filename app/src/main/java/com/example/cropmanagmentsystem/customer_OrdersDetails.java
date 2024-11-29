@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -23,17 +23,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class customer_OrdersDetails extends Fragment {
 
     private RecyclerView rvOrders;
-    private Spinner spinnerSort;
     private OrderAdapter orderAdapter;
     private List<Order> ordersList = new ArrayList<>();
-    private List<Order> filteredOrdersList = new ArrayList<>();  // List to hold filtered orders
     private String currentUserId;
+    private Spinner monthSpinner, yearSpinner;
+    private long selectedDateInMillis = 0; // Default to 0 for no date selected
 
     @Nullable
     @Override
@@ -41,8 +40,10 @@ public class customer_OrdersDetails extends Fragment {
         View view = inflater.inflate(R.layout.fragment_customer_orders_details, container, false);
 
         // Initialize views
-        spinnerSort = view.findViewById(R.id.spinnerSort);
         rvOrders = view.findViewById(R.id.rvOrders);
+        monthSpinner = view.findViewById(R.id.monthSpinner);
+        yearSpinner = view.findViewById(R.id.yearSpinner);
+        Button filterButton = view.findViewById(R.id.filterByDateButton);
 
         // Set up RecyclerView
         rvOrders.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -53,48 +54,18 @@ public class customer_OrdersDetails extends Fragment {
         // Load orders from Firebase
         loadOrdersFromFirebase();
 
-        // Set up Spinner adapter
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.sort_options_admin,
-                android.R.layout.simple_spinner_item
-        );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerSort.setAdapter(adapter);
+        // Set Spinner Listeners
+        monthSpinner.setOnItemSelectedListener(new SpinnerListener());
+        yearSpinner.setOnItemSelectedListener(new SpinnerListener());
 
-        // Handle Spinner item selection
-        spinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0: // "All Orders"
-                        displayAllOrders();
-                        break;
-                    case 1: // "Highest Total Amount"
-                        sortByHighestTotalAmount();
-                        break;
-                    case 2: // "Newest First"
-                        sortByNewestFirst();
-                        break;
-                    case 3: // "Paid Orders"
-                        displayPaidOrders();
-                        break;
-                    case 4: // "Not Paid Orders"
-                        displayNotPaidOrders();
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing
-            }
+        // Set Filter Button Listener
+        filterButton.setOnClickListener(v -> {
+            // You can replace this with logic to get the selected date in millis
+            // Example: selectedDateInMillis = getDateInMillisFromDatePicker();
+            filterOrders();
         });
 
-        // Set default selection to "All Orders"
-        spinnerSort.setSelection(0);
-
-        return view; // Return the root view
+        return view;
     }
 
     private void loadOrdersFromFirebase() {
@@ -104,32 +75,15 @@ public class customer_OrdersDetails extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         ordersList.clear();
                         for (DataSnapshot orderSnapshot : snapshot.getChildren()) {
-                            // Get orderId from snapshot key (orderSnapshot.getKey())
                             String orderId = orderSnapshot.getKey();
-
-                            // Get the Order object from the snapshot
                             Order order = orderSnapshot.getValue(Order.class);
-                            if (order != null) {
-                                // Set the orderId in the Order object
+                            if (order != null && order.getUserId().equals(currentUserId)) {
                                 order.setOrderId(orderId);
-                                Log.d("Orders", "Order Date Time: " + order.getOrderDateTime());
-                                Log.d("OrderAdapter", "Payment Date Time (raw): " + order.getPaymentDateTime());  // Log the raw value
-
-                                // Optionally check for userId if you want to filter
-                                if (order.getUserId().equals(currentUserId)) {
-                                    ordersList.add(order);
-                                }
+                                ordersList.add(order);
                             }
                         }
-                        filteredOrdersList.addAll(ordersList);  // Initially, all orders are shown
 
-                        // Initialize the adapter only after data is loaded
-                        if (orderAdapter == null) {
-                            orderAdapter = new OrderAdapter(filteredOrdersList);
-                            rvOrders.setAdapter(orderAdapter);
-                        } else {
-                            orderAdapter.notifyDataSetChanged();  // Notify adapter if already set
-                        }
+                        filterOrders(); // Filter orders after loading
                     }
 
                     @Override
@@ -139,64 +93,69 @@ public class customer_OrdersDetails extends Fragment {
                 });
     }
 
-    private void displayAllOrders() {
-        filteredOrdersList.clear();
-        filteredOrdersList.addAll(ordersList);  // Restore the full list
+    private void filterOrders() {
+        String selectedMonth = monthSpinner.getSelectedItem().toString();
+        String selectedYear = yearSpinner.getSelectedItem().toString();
 
-        // Ensure the adapter is set before notifying
-        if (orderAdapter != null) {
-            orderAdapter.notifyDataSetChanged();
-        }
-    }
+        List<Order> filteredOrders = new ArrayList<>();
 
-    private void sortByHighestTotalAmount() {
-        Collections.sort(filteredOrdersList, (o1, o2) -> Double.compare(o2.getTotalAmount(), o1.getTotalAmount()));
-
-        // Ensure the adapter is set before notifying
-        if (orderAdapter != null) {
-            orderAdapter.notifyDataSetChanged();
-        }
-    }
-
-    private void sortByNewestFirst() {
-        Collections.sort(filteredOrdersList, (o1, o2) -> Long.compare(o2.getOrderDateTime(), o1.getOrderDateTime()));
-
-        // Ensure the adapter is set before notifying
-        if (orderAdapter != null) {
-            orderAdapter.notifyDataSetChanged();
-        }
-    }
-
-    private void displayPaidOrders() {
-        List<Order> paidOrders = new ArrayList<>();
         for (Order order : ordersList) {
-            if ("Paid".equalsIgnoreCase(order.getPaymentStatus())) {
-                paidOrders.add(order);
+            boolean matchesMonth = selectedMonth.equals("All Months") ||
+                    getMonthName(Integer.parseInt(order.getOrderMonth())).equalsIgnoreCase(selectedMonth);
+            boolean matchesYear = selectedYear.equals("All Years") || order.getOrderYear().equals(selectedYear);
+
+            boolean matchesDate = true;
+            if (selectedDateInMillis != 0) {  // Checking if the selected date is not 0 (default value)
+                long orderDateTime = order.getOrderDateTime();
+
+                if (orderDateTime != 0) { // Assuming 0 means no date
+                    matchesDate = isSameDay(orderDateTime, selectedDateInMillis);
+                } else {
+                    Log.w("customer_OrdersDetails", "Order missing date field: " + order.getOrderId());
+                    matchesDate = false;
+                }
+            }
+
+            if (matchesMonth && matchesYear && matchesDate) {
+                filteredOrders.add(order);
             }
         }
-        filteredOrdersList.clear();
-        filteredOrdersList.addAll(paidOrders);
 
-        // Ensure the adapter is set before notifying
-        if (orderAdapter != null) {
-            orderAdapter.notifyDataSetChanged();
+        if (orderAdapter == null) {
+            orderAdapter = new OrderAdapter(filteredOrders);
+            rvOrders.setAdapter(orderAdapter);
+        } else {
+            orderAdapter.updateOrders(filteredOrders); // Update the orders list and notify adapter
         }
+
+        //Toast.makeText(getContext(), "Filtered " + filteredOrders.size() + " orders", Toast.LENGTH_SHORT).show();
     }
 
-    private void displayNotPaidOrders() {
-        List<Order> notPaidOrders = new ArrayList<>();
-        for (Order order : ordersList) {
-            if (!"Paid".equalsIgnoreCase(order.getPaymentStatus())) {
-                notPaidOrders.add(order);
-            }
-        }
-        filteredOrdersList.clear();
-        filteredOrdersList.addAll(notPaidOrders);
-
-        // Ensure the adapter is set before notifying
-        if (orderAdapter != null) {
-            orderAdapter.notifyDataSetChanged();
-        }
+    private String getMonthName(int monthNumber) {
+        String[] months = getResources().getStringArray(R.array.months_array);
+        return months[monthNumber];
     }
 
+    private boolean isSameDay(long date1Millis, long date2Millis) {
+        java.util.Calendar cal1 = java.util.Calendar.getInstance();
+        java.util.Calendar cal2 = java.util.Calendar.getInstance();
+        cal1.setTimeInMillis(date1Millis);
+        cal2.setTimeInMillis(date2Millis);
+
+        return cal1.get(java.util.Calendar.YEAR) == cal2.get(java.util.Calendar.YEAR) &&
+                cal1.get(java.util.Calendar.MONTH) == cal2.get(java.util.Calendar.MONTH) &&
+                cal1.get(java.util.Calendar.DAY_OF_MONTH) == cal2.get(java.util.Calendar.DAY_OF_MONTH);
+    }
+
+    private class SpinnerListener implements AdapterView.OnItemSelectedListener {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            filterOrders();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+            // Do nothing
+        }
+    }
 }
