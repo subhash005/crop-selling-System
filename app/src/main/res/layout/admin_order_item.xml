@@ -43,16 +43,6 @@
                 android:textSize="16sp"
                 android:textColor="@android:color/black"
                 android:layout_marginBottom="4dp" />
-
-            <TextView
-                android:id="@+id/orderUserNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="User Number: ----"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginBottom="4dp" />
-
             <TextView
                 android:id="@+id/orderDeliveryAddress"
                 android:layout_width="wrap_content"
@@ -69,63 +59,6 @@
                 android:text="Total Amount: ----"
                 android:textSize="16sp"
                 android:layout_marginBottom="4dp" />
-
-            <!-- Payment Details Section -->
-            <TextView
-                android:id="@+id/paymentMethod"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Payment Method: ----"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginBottom="4dp" />
-
-            <TextView
-                android:id="@+id/orderPaymentStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Payment Status: ----"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginBottom="4dp" />
-
-            <TextView
-                android:id="@+id/orderpayment_Id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Payment ID: ----"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginBottom="4dp" />
-
-            <!-- Date and Time Details -->
-            <TextView
-                android:id="@+id/orderdate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Order Date/Time: ----"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginBottom="4dp" />
-
-            <TextView
-                android:id="@+id/orderpaymentDateTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Payment Date/Time: ----"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginBottom="4dp" />
-
-            <!-- Delivery Status -->
-            <TextView
-                android:id="@+id/deliveryStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Delivery Status: ----"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginBottom="8dp" />
 
             <!-- Cart Items Label -->
             <TextView
@@ -144,6 +77,81 @@
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
                 android:layout_marginTop="8dp" />
+
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone">
+    <TextView
+        android:id="@+id/orderUserNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User Number: ----"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="4dp" />
+
+
+    <!-- Payment Details Section -->
+    <TextView
+        android:id="@+id/paymentMethod"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Payment Method: ----"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/orderPaymentStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Payment Status: ----"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/orderpayment_Id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Payment ID: ----"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="4dp" />
+
+    <!-- Date and Time Details -->
+    <TextView
+        android:id="@+id/orderdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Order Date/Time: ----"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/orderpaymentDateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Payment Date/Time: ----"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="4dp" />
+
+    <!-- Delivery Status -->
+    <TextView
+        android:id="@+id/deliveryStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delivery Status: ----"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="8dp" />
+
+</LinearLayout>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

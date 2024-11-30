@@ -7,6 +7,8 @@
     android:fillViewport="true"
     tools:context=".admin_home_freg">
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,7 +16,39 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingTop="28dp"
-        android:paddingBottom="16dp">
+        android:paddingBottom="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="35sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:text="Green "/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="35sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/dancing"
+                android:textColor="#55983E"
+                android:text="Feild"/>
+        </LinearLayout>
+        <!-- Banner LinearLayout at the bottom -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/banner2"> <!-- Set a color or image background for the banner -->
+
+        </LinearLayout>
 
         <!-- Categories Title -->
         <TextView
@@ -26,7 +60,8 @@
             android:textColor="#007E2F"
             android:textStyle="bold"
             android:fontFamily="@font/spartan_bold"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"/>
 
         <!-- Categories RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
@@ -34,18 +69,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical"
+            android:visibility="gone"/>
 
         <!-- Crops Title -->
         <TextView
             android:id="@+id/cropsTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Crops"
             android:textSize="34sp"
             android:textColor="#007E2F"
             android:textStyle="bold"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" />
 
         <!-- Spinner for Category Selection -->
@@ -57,12 +93,26 @@
             android:spinnerMode="dropdown"
             android:minHeight="48dp" />
 
+        <!-- TextView for 'No crops available' message -->
+        <TextView
+            android:id="@+id/no_crops_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"
+            android:text="No crops available in this category"
+            android:textSize="16sp"
+            android:visibility="gone"
+            android:textColor="#FF0000" />
+
+
         <!-- Crops RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView_cropdata"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            android:layout_marginLeft="10dp"
             android:scrollbars="vertical" />
 
     </LinearLayout>

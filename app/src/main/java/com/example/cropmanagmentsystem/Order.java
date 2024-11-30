@@ -8,7 +8,7 @@ public class Order {
     private int totalAmount;
     private List<CartItem> cartItems;
     private String paymentID;
-    private String paymentDateTime;  // Changed to String to handle both date and "NA"
+    private String paymentDateTime;
     private String orderMonth;
     private String orderYear;
 

@@ -5,13 +5,149 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        android:layout_margin="8dp"
+        app:cardBackgroundColor="#FFFFFF">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:gravity="center_horizontal">
+
+            <!-- Image of the product -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                android:layout_margin="8dp"
+                app:cardBackgroundColor="#FFFFFF">
+                <ImageView
+                    android:id="@+id/crop_pic"
+                    android:layout_width="120dp"
+                    android:layout_height="110dp"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/rounded_image"
+                    tools:src="@drawable/fruits" />
+            </androidx.cardview.widget.CardView>
+
+
+            <!-- Product Name -->
+            <TextView
+                android:id="@+id/crop_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="12dp"
+                android:text="Red Apple"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#4A2E0D"
+                tools:text="Red Apple" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <!-- Product weight -->
+                        <TextView
+                            android:id="@+id/product_weight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Per/kg : Rs. "
+                            android:textSize="14sp"
+                            android:textColor="#A1887F"
+                            tools:text="1kg" />
+                        <!-- Product Price -->
+                        <TextView
+                            android:id="@+id/crop_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="$4,99"
+                            android:fontFamily="@font/dancing"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="#FF5722"
+                            android:layout_marginRight="8dp"
+                            tools:text="$4,99" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <!-- Crop Stock -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Stock/ Left : "
+                            android:textColor="@android:color/holo_red_dark"
+                            android:textSize="16sp" />
+
+
+                        <TextView
+                            android:id="@+id/crop_stock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="0.00"
+                            android:fontFamily="@font/dancing"
+                            android:textColor="@android:color/holo_red_dark"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <!-- Add to cart button -->
+                <ImageButton
+                    android:id="@+id/add_to_cart_button"
+                    android:layout_width="30dp"
+                    android:layout_height="38dp"
+                    android:layout_marginLeft="2dp"
+                    android:scaleType="fitCenter"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/plusicon"
+                    android:src="@drawable/plusicon"
+                    android:contentDescription="Add to Cart"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:padding="10dp"
         app:cardElevation="4dp"
-        app:cardCornerRadius="8dp">
+        app:cardCornerRadius="8dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -21,30 +157,31 @@
             android:padding="12dp">
 
             <!--  Crop Image -->
-            <ImageView
-                android:id="@+id/crop_pic"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginBottom="8dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/leaf2k3" />
+<!--            <ImageView-->
+<!--                android:id="@+id/crop_pic"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="200dp"-->
+<!--                android:layout_marginBottom="8dp"-->
+<!--                android:scaleType="centerCrop"-->
+<!--                android:src="@drawable/leaf2k3" />-->
 
             <!-- Crop Name -->
-            <TextView
-                android:id="@+id/crop_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Crop Name"
-                android:textColor="#55983E"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+<!--            <TextView-->
+<!--                android:id="@+id/crop_name"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:text="Crop Name"-->
+<!--                android:textColor="#55983E"-->
+<!--                android:textSize="20sp"-->
+<!--                android:textStyle="bold" />-->
 
             <!-- Crop Category -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -71,12 +208,14 @@
                 android:layout_marginTop="8dp"
                 android:text="Description of the crop goes here. It should be short and informative."
                 android:textColor="@android:color/darker_gray"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
                 <!-- Crop Price -->
                 <TextView
                     android:layout_width="wrap_content"
@@ -86,7 +225,6 @@
                     android:textColor="@color/light_green_splash"
                     android:textSize="16sp" />
                 <TextView
-                    android:id="@+id/crop_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -98,7 +236,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
                 <!-- Crop Stock -->
                 <TextView
                     android:layout_width="wrap_content"
@@ -107,14 +246,14 @@
                     android:text="Stock/KG Left : "
                     android:textColor="@android:color/holo_red_dark"
                     android:textSize="16sp" />
-                <TextView
-                    android:id="@+id/crop_stock"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="0.00"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="16sp" />
+<!--                <TextView-->
+<!--                    android:id="@+id/crop_stock"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="8dp"-->
+<!--                    android:text="0.00"-->
+<!--                    android:textColor="@android:color/holo_red_dark"-->
+<!--                    android:textSize="16sp" />-->
             </LinearLayout>
 
 
@@ -129,9 +268,11 @@
                 android:layout_marginTop="8dp"
                 android:text="Organic"
                 android:textColor="@android:color/holo_green_dark"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
 
 </LinearLayout>

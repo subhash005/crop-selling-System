@@ -24,6 +24,24 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+    <!-- Search Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/orderSearchEditText"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:hint="Search by Order ID"
+            android:layout_marginLeft="5dp"
+            android:drawableEnd="@drawable/baseline_search_24"
+            android:inputType="text" />
+    </LinearLayout>
+
     <!-- Filter Section -->
     <LinearLayout
         android:layout_width="match_parent"

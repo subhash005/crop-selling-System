@@ -1,11 +1,15 @@
 package com.example.cropmanagmentsystem;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -22,12 +26,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class AdminOrderFragment extends Fragment {
 
     private RecyclerView orderRecyclerView;
     private Spinner monthSpinner, yearSpinner;
+    private EditText orderSearchEditText;
     private AdminOrderAdapter orderAdapter;
     private List<AdminOrder> orders = new ArrayList<>();
     private List<AdminOrder> filteredOrders = new ArrayList<>();
@@ -48,6 +54,7 @@ public class AdminOrderFragment extends Fragment {
         orderRecyclerView = rootView.findViewById(R.id.orderRecyclerView);
         monthSpinner = rootView.findViewById(R.id.monthSpinner);
         yearSpinner = rootView.findViewById(R.id.yearSpinner);
+        orderSearchEditText = rootView.findViewById(R.id.orderSearchEditText);
 
         // Setup RecyclerView
         orderRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -60,11 +67,22 @@ public class AdminOrderFragment extends Fragment {
         monthSpinner.setOnItemSelectedListener(new SpinnerListener());
         yearSpinner.setOnItemSelectedListener(new SpinnerListener());
 
-        // Setup filter button listener
-        rootView.findViewById(R.id.filterByDateButton).setOnClickListener(v -> {
-            // You can replace this with logic to get the selected date in millis
-            // Example: selectedDateInMillis = getDateInMillisFromDatePicker();
-            filterOrders();
+        // Setup search functionality
+        orderSearchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+                // Optional: Add logic before the text is changed
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                filterOrders(); // Filter orders when the text changes
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // Optional: Add logic after the text is changed
+            }
         });
 
         // Fetch orders from Firebase
@@ -100,6 +118,7 @@ public class AdminOrderFragment extends Fragment {
     }
 
     private void filterOrders() {
+        String searchQuery = orderSearchEditText.getText().toString().toLowerCase();
         String selectedMonth = monthSpinner.getSelectedItem().toString();
         String selectedYear = yearSpinner.getSelectedItem().toString();
 
@@ -110,44 +129,21 @@ public class AdminOrderFragment extends Fragment {
                     getMonthName(Integer.parseInt(order.getOrderMonth())).equalsIgnoreCase(selectedMonth);
             boolean matchesYear = selectedYear.equals("All Years") || order.getOrderYear().equals(selectedYear);
 
-            boolean matchesDate = true;
-            if (selectedDateInMillis != 0) {  // Checking if the selected date is not 0 (default value)
-                long orderDateTime = order.getOrderDateTime(); // Primitive long value
+            // Check if the order ID matches the search query (case-insensitive)
+            boolean matchesSearchQuery = order.getOrderID().toLowerCase().contains(searchQuery);
 
-                // Check if orderDateTime is valid (not zero or custom invalid value)
-                if (orderDateTime != 0) { // Assuming 0 means no date
-                    matchesDate = isSameDay(orderDateTime, selectedDateInMillis);
-                } else {
-                    Log.w("AdminOrderFragment", "Order missing date field: " + order.getOrderID());
-                    matchesDate = false;
-                }
-            }
-
-            if (matchesMonth && matchesYear && matchesDate) {
+            if (matchesMonth && matchesYear && matchesSearchQuery) {
                 filteredOrders.add(order);
             }
         }
 
         orderAdapter.notifyDataSetChanged();
-        //Toast.makeText(getContext(), "Filtered " + filteredOrders.size() + " orders", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Filtered " + filteredOrders.size() + " orders", Toast.LENGTH_SHORT).show();
     }
 
     private String getMonthName(int monthNumber) {
         String[] months = getResources().getStringArray(R.array.months_array);
         return months[monthNumber];
-    }
-
-    private boolean isSameDay(long date1Millis, long date2Millis) {
-        // You can implement this function using Java's Calendar or Date classes
-        // Here's a simple implementation:
-        java.util.Calendar cal1 = java.util.Calendar.getInstance();
-        java.util.Calendar cal2 = java.util.Calendar.getInstance();
-        cal1.setTimeInMillis(date1Millis);
-        cal2.setTimeInMillis(date2Millis);
-
-        return cal1.get(java.util.Calendar.YEAR) == cal2.get(java.util.Calendar.YEAR) &&
-                cal1.get(java.util.Calendar.MONTH) == cal2.get(java.util.Calendar.MONTH) &&
-                cal1.get(java.util.Calendar.DAY_OF_MONTH) == cal2.get(java.util.Calendar.DAY_OF_MONTH);
     }
 
     private class SpinnerListener implements AdapterView.OnItemSelectedListener {
