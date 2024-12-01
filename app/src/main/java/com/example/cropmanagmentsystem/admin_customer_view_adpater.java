@@ -1,12 +1,14 @@
 package com.example.cropmanagmentsystem;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -42,17 +44,15 @@ public class admin_customer_view_adpater extends RecyclerView.Adapter<admin_cust
         holder.userMail.setText(user.getMail().trim());
         holder.userAdress.setText(user.getAddress().trim());
         holder.userNumber.setText(user.getNumber().trim());
+
         // Load user profile pic from Firebase storage URL using Glide or Picasso
         Glide.with(context)
                 .load(user.getProfilepic())
                 .placeholder(R.drawable.b) // Default placeholder image
                 .into(holder.userProfilePic);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewCustomerDetails(user);
-            }
-        });
+
+        // Set OnClickListener for item click to show options dialog
+        holder.itemView.setOnClickListener(v -> showAlertDialog(user));
     }
 
     @Override
@@ -62,19 +62,46 @@ public class admin_customer_view_adpater extends RecyclerView.Adapter<admin_cust
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {
         ImageView userProfilePic;
-        TextView userName, userMail,userNumber,userAdress;
+        TextView userName, userMail, userNumber, userAdress;
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
             userProfilePic = itemView.findViewById(R.id.userProfilePic);
             userName = itemView.findViewById(R.id.userName);
             userMail = itemView.findViewById(R.id.userMail);
-            userNumber=itemView.findViewById(R.id.userNumber);
-            userAdress=itemView.findViewById(R.id.userAdress);
-
+            userNumber = itemView.findViewById(R.id.userNumber);
+            userAdress = itemView.findViewById(R.id.userAdress);
         }
     }
-    // Method to show user details dialog
+
+    // Method to show AlertDialog with options when a user item is clicked
+    private void showAlertDialog(Users user) {
+        // Create an AlertDialog with options
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Select an Action");
+
+        // Add options to the dialog
+        builder.setItems(new String[]{"View Order Details", "View Customer Details"}, (dialog, which) -> {
+            switch (which) {
+                case 0:
+                    // View Order Details - Open the order details activity for this user
+                    Intent intent = new Intent(context, customer_ka_OrderDetailsActivity.class);
+                    intent.putExtra("userId", user.getUserId());
+                    context.startActivity(intent);
+                    break;
+                case 1:
+                    // View Customer Details - Show a dialog with customer details
+                    viewCustomerDetails(user);
+                    break;
+            }
+        });
+
+        // Make the dialog cancelable (clicking outside or back button closes it)
+        builder.setCancelable(true);
+        builder.show();
+    }
+
+    // Method to show a custom dialog displaying customer details
     private void viewCustomerDetails(Users user) {
         // Inflate the dialog view
         View dialogView = LayoutInflater.from(context).inflate(R.layout.dailog_view_customers, null);
@@ -82,8 +109,10 @@ public class admin_customer_view_adpater extends RecyclerView.Adapter<admin_cust
         // Initialize the dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(dialogView);
+        builder.setCancelable(true); // Make the dialog dismissible
         // Create the dialog
         AlertDialog dialog = builder.create();
+
         // Show the dialog
         dialog.show();
 
@@ -107,16 +136,7 @@ public class admin_customer_view_adpater extends RecyclerView.Adapter<admin_cust
                 .placeholder(R.drawable.b)
                 .into(profilePic);
 
-
-
         // Close button action
-        closeDialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-
+        closeDialog.setOnClickListener(v -> dialog.dismiss());
     }
 }

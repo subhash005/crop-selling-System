@@ -202,6 +202,7 @@ public class customer_cart extends Fragment {
                 }
 
                 Map<String, Object> orderDetails = new HashMap<>();
+                orderDetails.put("orderId", orderId);  // Add the orderId here
                 orderDetails.put("userId", userId);
                 orderDetails.put("userName", userName);
                 orderDetails.put("userNumber", userNumber);

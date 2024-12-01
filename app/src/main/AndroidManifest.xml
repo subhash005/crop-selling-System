@@ -17,6 +17,9 @@
         android:theme="@style/Theme.CropManagmentSystem"
         tools:targetApi="31">
         <activity
+            android:name=".customer_ka_OrderDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".UserMessageActivity"
             android:exported="false" />
         <activity

@@ -31,6 +31,15 @@
             android:fontFamily="@font/spartan_bold"
             android:text="Customer List"/>
     </LinearLayout>
+    <EditText
+        android:id="@+id/search_customer_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search by name"
+        android:inputType="text"
+        android:paddingBottom="8dp"
+        android:layout_margin="10dp"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"

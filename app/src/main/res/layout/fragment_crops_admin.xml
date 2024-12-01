@@ -74,101 +74,105 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/form"
-        android:orientation="vertical"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="336dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
         android:layout_marginRight="20dp"
-        android:layout_centerInParent="true">
-
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
 
 
         <!-- Crop Name -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Crop Name"
             android:layout_marginTop="20dp"
-            android:textColor="@color/black"
             android:layout_marginBottom="5dp"
-            android:textSize="18sp"/>
+            android:text="Crop Name"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
         <EditText
+            android:id="@+id/input_name_crop"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:padding="10dp"
+            android:background="@drawable/custom_edittext_background"
             android:drawablePadding="10dp"
             android:hint="Enter crop name"
-            android:id="@+id/input_name_crop"
-            android:background="@drawable/custom_edittext_background"
-            android:inputType="text"/>
+            android:inputType="text"
+            android:padding="10dp" />
 
         <!-- Crop Description -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Description"
             android:layout_marginTop="10dp"
-            android:textColor="@color/black"
             android:layout_marginBottom="5dp"
-            android:textSize="18sp"/>
+            android:text="Description"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
         <EditText
+            android:id="@+id/input_description_crop"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:padding="10dp"
-            android:hint="Enter crop description"
             android:background="@drawable/custom_edittext_background"
-            android:id="@+id/input_description_crop"
+            android:gravity="top"
+            android:hint="Enter crop description"
             android:inputType="textMultiLine"
-            android:gravity="top"/>
+            android:padding="10dp" />
 
         <!-- Crop Price -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Price per Unit"
             android:layout_marginTop="10dp"
-            android:textColor="@color/black"
             android:layout_marginBottom="5dp"
-            android:textSize="18sp"/>
+            android:text="Price per Unit"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
         <EditText
+            android:id="@+id/input_price_crop"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:padding="10dp"
-            android:hint="Enter price"
             android:background="@drawable/custom_edittext_background"
-            android:id="@+id/input_price_crop"
-            android:inputType="numberDecimal"/>
+            android:hint="Enter price"
+            android:inputType="numberDecimal"
+            android:padding="10dp" />
 
         <!-- Crop Stock -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Stock Quantity"
             android:layout_marginTop="10dp"
-            android:textColor="@color/black"
             android:layout_marginBottom="5dp"
-            android:textSize="18sp"/>
+            android:text="Stock Quantity"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
         <EditText
+            android:id="@+id/input_stock_crop"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:padding="10dp"
-            android:hint="Enter stock quantity"
             android:background="@drawable/custom_edittext_background"
-            android:id="@+id/input_stock_crop"
-            android:inputType="number"/>
+            android:hint="Enter stock quantity"
+            android:inputType="number"
+            android:padding="10dp" />
 
         <!-- Crop Category -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Category"
             android:layout_marginTop="10dp"
-            android:textColor="@color/black"
             android:layout_marginBottom="5dp"
-            android:textSize="18sp"/>
+            android:text="Category"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
         <Spinner
             android:id="@+id/input_category_crop"
             android:layout_width="match_parent"
@@ -181,22 +185,21 @@
             android:id="@+id/input_is_organic_crop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Is Organic?"
             android:layout_marginTop="12dp"
-            android:textColor="@color/black"/>
-
+            android:text="Is Organic?"
+            android:textColor="@color/black" />
 
 
         <!-- Add Crop Button -->
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_add_crop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@drawable/custom_login_btn_background"
             android:text="Add Crop"
-            android:id="@+id/button_add_crop"
-            android:textSize="17sp"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:textSize="17sp" />
 
     </LinearLayout>
 

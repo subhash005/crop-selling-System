@@ -69,9 +69,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:scrollbars="vertical"
-            android:visibility="gone"/>
-
+            android:visibility="gone"
+            android:scrollbars="vertical"/>
         <!-- Crops Title -->
         <TextView
             android:id="@+id/cropsTitle"
@@ -89,9 +88,18 @@
             android:id="@+id/spinner_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:spinnerMode="dropdown"
+            android:layout_marginBottom="5dp"
             android:minHeight="48dp" />
+        <!-- Search by crop name -->
+        <EditText
+            android:id="@+id/search_crop_name"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Search by crop name"
+            android:padding="10dp"
+            android:inputType="text" />
+
 
         <!-- TextView for 'No crops available' message -->
         <TextView
