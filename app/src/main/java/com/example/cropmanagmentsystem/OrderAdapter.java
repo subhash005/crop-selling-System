@@ -1,5 +1,6 @@
 package com.example.cropmanagmentsystem;
 
+import android.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +33,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         Order order = orders.get(position);
-        Log.d("OrderAdapter", "Order ID: " + order.getOrderId());  // Add this line to debug
+        Log.d("OrderAdapter", "Order ID: " + order.getOrderId()); // Debugging
 
         // Setting text for order details
         holder.tvOrderId.setText("Order ID: " + order.getOrderId());
@@ -47,30 +48,29 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         holder.payment_Id.setText("Payment ID: " + order.getPaymentID());
 
         // Format and display payment date
-        String paymentDateTime = order.getPaymentDateTime();  // Get the payment date time
-
+        String paymentDateTime = order.getPaymentDateTime();
         if ("Pending".equals(paymentDateTime)) {
-            // If paymentDateTime is "NA", display it as it is
             holder.tvpaymentDateTime.setText("Payment Date: Pending");
         } else {
             try {
-                // If paymentDateTime is not "NA", proceed with parsing it as a timestamp
-                long paymentTimestamp = Long.parseLong(paymentDateTime);  // Convert string to long
-                Date paymentDate = new Date(paymentTimestamp);  // Create a Date object
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());  // Date format pattern
-                String formattedPaymentDate = sdf.format(paymentDate);  // Format the date
-                holder.tvpaymentDateTime.setText("Payment Date: " + formattedPaymentDate);  // Set the formatted date
+                long paymentTimestamp = Long.parseLong(paymentDateTime);
+                Date paymentDate = new Date(paymentTimestamp);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                String formattedPaymentDate = sdf.format(paymentDate);
+                holder.tvpaymentDateTime.setText("Payment Date: " + formattedPaymentDate);
             } catch (NumberFormatException e) {
                 Log.e("OrderAdapter", "Error parsing payment date time: " + e.getMessage());
                 holder.tvpaymentDateTime.setText("Payment Date: Invalid date");
             }
         }
 
-
         // Set up Child RecyclerView for Cart items
         CartItemAdapter cartItemAdapter = new CartItemAdapter(order.getCartItems());
         holder.rvCartItems.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.rvCartItems.setAdapter(cartItemAdapter);
+
+        // Add click listener for dialog functionality
+        holder.itemView.setOnClickListener(v -> showOrderDetailsDialog(holder.itemView, order));
     }
 
     @Override
@@ -84,7 +84,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Initialize all views
             tvOrderId = itemView.findViewById(R.id.tvOrderId);
             tvUserName = itemView.findViewById(R.id.tvUserName);
             tvUserNumber = itemView.findViewById(R.id.tvUserNumber);
@@ -99,10 +98,49 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             tvpaymentDateTime = itemView.findViewById(R.id.tvpaymentDateTime);
         }
     }
+
     public void updateOrders(List<Order> newOrders) {
-        // Update the orders list
         this.orders = newOrders;
-        // Notify the adapter that the data has changed
         notifyDataSetChanged();
+    }
+
+    private void showOrderDetailsDialog(View view, Order order) {
+        // Inflate the dialog layout
+        View dialogView = LayoutInflater.from(view.getContext()).inflate(R.layout.customer_dialog_order_details, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setView(dialogView);
+
+        AlertDialog dialog = builder.create();
+
+        // Initialize dialog views
+        TextView dialogOrderId = dialogView.findViewById(R.id.dialogOrderId);
+        TextView dialogUserName = dialogView.findViewById(R.id.dialogUserName);
+        TextView dialogUserNumber = dialogView.findViewById(R.id.dialogUserNumber);
+        TextView dialogDeliveryAddress = dialogView.findViewById(R.id.dialogDeliveryAddress);
+        TextView dialogTotalAmount = dialogView.findViewById(R.id.dialogTotalAmount);
+        TextView dialogPaymentMethod = dialogView.findViewById(R.id.dialogPaymentMethod);
+        TextView dialogPaymentStatus = dialogView.findViewById(R.id.dialogPaymentStatus);
+        TextView dialogOrderDateTime = dialogView.findViewById(R.id.dialogOrderDateTime);
+        TextView dialogDeliveryStatus = dialogView.findViewById(R.id.dialogDeliveryStatus);
+        TextView dialogPaymentId = dialogView.findViewById(R.id.dialogPaymentId);
+        RecyclerView dialogRvCartItems = dialogView.findViewById(R.id.dialogRvCartItems);
+
+        // Set dialog data
+        dialogOrderId.setText("Order ID: " + order.getOrderId());
+        dialogUserName.setText("Name: " + order.getUserName());
+        dialogUserNumber.setText("Phone no: " + order.getUserNumber());
+        dialogDeliveryAddress.setText("Address: " + order.getDeliveryAddress());
+        dialogTotalAmount.setText("Total amount: ₹" + order.getTotalAmount());
+        dialogPaymentMethod.setText("Payment mode: " + order.getPaymentMethod());
+        dialogPaymentStatus.setText("Payment Status: " + order.getPaymentStatus());
+        dialogOrderDateTime.setText("Order Date: " + new Date(order.getOrderDateTime()).toString());
+        dialogDeliveryStatus.setText("Delivery Status: " + order.getDeliveryStatus());
+        dialogPaymentId.setText("Payment ID: " + order.getPaymentID());
+
+        CartItemAdapter cartItemAdapter = new CartItemAdapter(order.getCartItems());
+        dialogRvCartItems.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        dialogRvCartItems.setAdapter(cartItemAdapter);
+
+        dialog.show();
     }
 }

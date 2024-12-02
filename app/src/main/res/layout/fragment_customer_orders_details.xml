@@ -45,7 +45,16 @@
             android:layout_weight="1"
             android:spinnerMode="dropdown"
             android:entries="@array/years_array" />
+        <Spinner
+            android:id="@+id/paymentStatusSpinner"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:spinnerMode="dropdown"
+            android:entries="@array/payment_status_array" />
     </LinearLayout>
+
+
 
     <!-- Filter by Date Button -->
     <Button

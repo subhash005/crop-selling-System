@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -31,7 +32,7 @@ public class customer_OrdersDetails extends Fragment {
     private OrderAdapter orderAdapter;
     private List<Order> ordersList = new ArrayList<>();
     private String currentUserId;
-    private Spinner monthSpinner, yearSpinner;
+    private Spinner monthSpinner, yearSpinner, paymentStatusSpinner;
     private long selectedDateInMillis = 0; // Default to 0 for no date selected
 
     @Nullable
@@ -43,6 +44,7 @@ public class customer_OrdersDetails extends Fragment {
         rvOrders = view.findViewById(R.id.rvOrders);
         monthSpinner = view.findViewById(R.id.monthSpinner);
         yearSpinner = view.findViewById(R.id.yearSpinner);
+        paymentStatusSpinner = view.findViewById(R.id.paymentStatusSpinner); // Reference to the new spinner
         Button filterButton = view.findViewById(R.id.filterByDateButton);
 
         // Set up RecyclerView
@@ -57,12 +59,11 @@ public class customer_OrdersDetails extends Fragment {
         // Set Spinner Listeners
         monthSpinner.setOnItemSelectedListener(new SpinnerListener());
         yearSpinner.setOnItemSelectedListener(new SpinnerListener());
+        paymentStatusSpinner.setOnItemSelectedListener(new SpinnerListener()); // Set listener for payment status spinner
 
         // Set Filter Button Listener
         filterButton.setOnClickListener(v -> {
-            // You can replace this with logic to get the selected date in millis
-            // Example: selectedDateInMillis = getDateInMillisFromDatePicker();
-            filterOrders();
+            filterOrders(); // Call filter method when button is clicked
         });
 
         return view;
@@ -96,13 +97,19 @@ public class customer_OrdersDetails extends Fragment {
     private void filterOrders() {
         String selectedMonth = monthSpinner.getSelectedItem().toString();
         String selectedYear = yearSpinner.getSelectedItem().toString();
+        String selectedPaymentStatus = paymentStatusSpinner.getSelectedItem().toString(); // Get selected payment status
 
         List<Order> filteredOrders = new ArrayList<>();
 
         for (Order order : ordersList) {
+            // Month and Year Filter
             boolean matchesMonth = selectedMonth.equals("All Months") ||
-                    getMonthName(Integer.parseInt(order.getOrderMonth())).equalsIgnoreCase(selectedMonth);
+                    getMonthName(Integer.parseInt(order.getOrderMonth()) - 1).equalsIgnoreCase(selectedMonth);
             boolean matchesYear = selectedYear.equals("All Years") || order.getOrderYear().equals(selectedYear);
+
+            // Payment Status Filter
+            boolean matchesPaymentStatus = selectedPaymentStatus.equals("Payments") ||
+                    selectedPaymentStatus.equalsIgnoreCase(order.getPaymentStatus());
 
             boolean matchesDate = true;
             if (selectedDateInMillis != 0) {  // Checking if the selected date is not 0 (default value)
@@ -116,7 +123,7 @@ public class customer_OrdersDetails extends Fragment {
                 }
             }
 
-            if (matchesMonth && matchesYear && matchesDate) {
+            if (matchesMonth && matchesYear && matchesPaymentStatus && matchesDate) {
                 filteredOrders.add(order);
             }
         }
@@ -127,8 +134,6 @@ public class customer_OrdersDetails extends Fragment {
         } else {
             orderAdapter.updateOrders(filteredOrders); // Update the orders list and notify adapter
         }
-
-        //Toast.makeText(getContext(), "Filtered " + filteredOrders.size() + " orders", Toast.LENGTH_SHORT).show();
     }
 
     private String getMonthName(int monthNumber) {
@@ -150,7 +155,7 @@ public class customer_OrdersDetails extends Fragment {
     private class SpinnerListener implements AdapterView.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            filterOrders();
+            filterOrders(); // Call filter on any spinner selection
         }
 
         @Override

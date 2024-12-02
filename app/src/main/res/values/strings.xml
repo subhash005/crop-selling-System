@@ -44,5 +44,12 @@
         <item>2025</item>
     </string-array>
 
+    <string-array name="payment_status_array">
+        <item>Payments</item>
+        <item>Paid</item>
+        <item>Not Paid</item>
+    </string-array>
+
+
 
 </resources>

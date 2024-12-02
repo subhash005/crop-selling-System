@@ -1,6 +1,5 @@
 package com.example.cropmanagmentsystem;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.text.Editable;
@@ -30,22 +29,22 @@ public class customer_crop_recycleView_adapter extends RecyclerView.Adapter<cust
     private Context context;
     private List<crops_model> cropList;
 
-    //variable delcaring for cart dialogBox
+    // Variable declaring for cart dialogBox
     private ImageView customer_cart_dialogBox_cropImage;
-    private TextView customer_cart_dialogBox_cropName,customer_cart_dialog_textView_total_price;
+    private TextView customer_cart_dialogBox_cropName, customer_cart_textView_total_price, customer_cart_dialog_crop_descrp;
     private EditText customer_cart_dialogBox_quantityKg;
     private Button customer_cart_dialogBox_addToCartButton;
 
-    customer_crop_recycleView_adapter(Context context ,List<crops_model> cropList){
-        this.context=context;
-        this.cropList=cropList;
-
+    customer_crop_recycleView_adapter(Context context, List<crops_model> cropList) {
+        this.context = context;
+        this.cropList = cropList;
     }
+
     @NonNull
     @Override
     public customer_crop_recycleView_adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.crop_cardview,parent,false);
-        customer_crop_recycleView_adapter.ViewHolder viewHolder=new customer_crop_recycleView_adapter.ViewHolder(view);
+        View view = LayoutInflater.from(context).inflate(R.layout.crop_cardview, parent, false);
+        customer_crop_recycleView_adapter.ViewHolder viewHolder = new customer_crop_recycleView_adapter.ViewHolder(view);
         return viewHolder;
     }
 
@@ -57,29 +56,31 @@ public class customer_crop_recycleView_adapter extends RecyclerView.Adapter<cust
         holder.crop_description.setText(crop.getCrop_description());
         holder.crop_price.setText(String.valueOf(crop.getCrop_price()));
         holder.crop_stock.setText(String.valueOf(crop.getCrop_stock()));
-        holder.crop_isOrganic.setText(crop.isCrop_isOrganic() ? "Organic" : "Not Organic"); // Use isCrop_isOrganic()
+        holder.crop_isOrganic.setText(crop.isCrop_isOrganic() ? "Organic" : "Not Organic");
         Glide.with(context).load(crop.getCrop_pic()).into(holder.crop_pic);
 
         // Show dialog when a crop item is clicked
         holder.itemView.setOnClickListener(view -> {
             showAddToCartDialog(crop);
         });
-
-
     }
 
     private void showAddToCartDialog(crops_model crop) {
-        final Dialog dialog =new Dialog(context);
+        final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_add_to_cart);
 
         // Set the crop image and name in the dialog
-         customer_cart_dialogBox_cropImage = dialog.findViewById(R.id.customer_cart_dialog_crop_image);
-         customer_cart_dialogBox_cropName = dialog.findViewById(R.id.customer_cart_dialog_crop_name);
-         customer_cart_dialogBox_quantityKg = dialog.findViewById(R.id.customer_cart_dialog_quantity_kg);
-         customer_cart_dialog_textView_total_price = dialog.findViewById(R.id.customer_cart_dialog_textView_total_price);
+        customer_cart_dialogBox_cropImage = dialog.findViewById(R.id.customer_cart_dialog_crop_image);
+        customer_cart_dialogBox_cropName = dialog.findViewById(R.id.customer_cart_dialog_crop_name);
+        customer_cart_dialogBox_quantityKg = dialog.findViewById(R.id.customer_cart_dialog_quantity_kg);
+        customer_cart_textView_total_price = dialog.findViewById(R.id.customer_cart_dialog_textView_total_price);
         customer_cart_dialogBox_addToCartButton = dialog.findViewById(R.id.customer_cart_dialog_add_to_cart_button);
 
+        // Set the crop name and description in the dialog
         customer_cart_dialogBox_cropName.setText(crop.getCrop_name());
+        customer_cart_dialog_crop_descrp = dialog.findViewById(R.id.customer_cart_dialog_crop_descrp);
+        customer_cart_dialog_crop_descrp.setText(crop.getCrop_description()); // Set crop description here
+
         // Set the maximum stock value as the hint in the quantity input field
         int maxStock = crop.getCrop_stock();
         customer_cart_dialogBox_quantityKg.setHint("Max Available : " + maxStock + " kg");
@@ -91,8 +92,7 @@ public class customer_crop_recycleView_adapter extends RecyclerView.Adapter<cust
                 .error(R.drawable.b) // Error image if loading fails
                 .into(customer_cart_dialogBox_cropImage);
 
-
-// Set a listener to update total price as user enters quantity
+        // Set a listener to update total price as user enters quantity
         customer_cart_dialogBox_quantityKg.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -107,54 +107,46 @@ public class customer_crop_recycleView_adapter extends RecyclerView.Adapter<cust
                     try {
                         int quantity = Integer.parseInt(quantityStr);
                         double totalPrice = crop.getCrop_price() * quantity;
-                        customer_cart_dialog_textView_total_price.setText(String.format("Total Price: Rs. %.2f", totalPrice));
+                        customer_cart_textView_total_price.setText(String.format("Total Price: Rs. %.2f", totalPrice));
                     } catch (NumberFormatException e) {
-                        customer_cart_dialog_textView_total_price.setText("Invalid input");
+                        customer_cart_textView_total_price.setText("Invalid input");
                     }
                 } else {
-                    customer_cart_dialog_textView_total_price.setText("Total Price: Rs. 0");
+                    customer_cart_textView_total_price.setText("Total Price: Rs. 0");
                 }
             }
         });
-
 
         // Show dialog
         dialog.show();
 
-        customer_cart_dialogBox_addToCartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String quantitytext=customer_cart_dialogBox_quantityKg.getText().toString().trim();
-                if(!quantitytext.isEmpty()){
-                    // Check if the quantity is within the available stock
-                    int quantity=Integer.parseInt(quantitytext);
-                    int stockAvailbal=crop.getCrop_stock();
-                    if(quantity<=stockAvailbal){
-                        double totalPrice = crop.getCrop_price() * quantity; // Calculate total price
-                        saveToCart(crop,quantity,totalPrice);
-                        Toast.makeText(context, "Added to cart!", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-
-                    }else {
-                        Toast.makeText(context, "Quantity exceeds stock available!", Toast.LENGTH_SHORT).show();
-                    }
+        customer_cart_dialogBox_addToCartButton.setOnClickListener(v -> {
+            String quantitytext = customer_cart_dialogBox_quantityKg.getText().toString().trim();
+            if (!quantitytext.isEmpty()) {
+                // Check if the quantity is within the available stock
+                int quantity = Integer.parseInt(quantitytext);
+                int stockAvailable = crop.getCrop_stock();
+                if (quantity <= stockAvailable) {
+                    double totalPrice = crop.getCrop_price() * quantity; // Calculate total price
+                    saveToCart(crop, quantity, totalPrice);
+                    Toast.makeText(context, "Added to cart!", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
                 } else {
-                    Toast.makeText(context, "Enter a quantity!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Quantity exceeds stock available!", Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                Toast.makeText(context, "Enter a quantity!", Toast.LENGTH_SHORT).show();
             }
-
         });
-
     }
 
-    private void saveToCart(crops_model crop , int quantity , double totalPrice){
-        // geting the firebase userId
+    private void saveToCart(crops_model crop, int quantity, double totalPrice) {
+        // Getting the Firebase userId
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference cartref = FirebaseDatabase.getInstance().getReference("cart").child(userId);
 
-        // crearting new Cart id for new cart
-        String cartId=cartref.push().getKey();
-
+        // Creating new Cart id for new cart
+        String cartId = cartref.push().getKey();
 
         // Create cart entry with crop details, quantity, and total price
         HashMap<String, Object> cartEntry = new HashMap<>();
@@ -169,7 +161,6 @@ public class customer_crop_recycleView_adapter extends RecyclerView.Adapter<cust
         cartref.child(cartId).setValue(cartEntry)
                 .addOnSuccessListener(aVoid -> Log.d("Cart", "Item added successfully"))
                 .addOnFailureListener(e -> Log.d("Cart", "Failed to add item: " + e.getMessage()));
-
     }
 
     @Override
@@ -179,16 +170,17 @@ public class customer_crop_recycleView_adapter extends RecyclerView.Adapter<cust
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView crop_pic;
-        TextView crop_name ,crop_category,crop_description,crop_price,crop_stock,crop_isOrganic;
+        TextView crop_name, crop_category, crop_description, crop_price, crop_stock, crop_isOrganic;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            crop_name=itemView.findViewById(R.id.crop_name);
-            crop_category=itemView.findViewById(R.id.crop_category);
-            crop_description=itemView.findViewById(R.id.crop_description);
-            crop_price=itemView.findViewById(R.id.crop_price);
-            crop_stock=itemView.findViewById(R.id.crop_stock);
-            crop_isOrganic=itemView.findViewById(R.id.crop_isOrganic);
-            crop_pic=itemView.findViewById(R.id.crop_pic);
+            crop_name = itemView.findViewById(R.id.crop_name);
+            crop_category = itemView.findViewById(R.id.crop_category);
+            crop_description = itemView.findViewById(R.id.crop_description);
+            crop_price = itemView.findViewById(R.id.crop_price);
+            crop_stock = itemView.findViewById(R.id.crop_stock);
+            crop_isOrganic = itemView.findViewById(R.id.crop_isOrganic);
+            crop_pic = itemView.findViewById(R.id.crop_pic);
         }
     }
 }
