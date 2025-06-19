@@ -32,14 +32,3 @@ A mobile app that bridges the gap between **farmers and customers**, enabling re
 | 💻 IDE & Tools  | Android Studio, XML, Firebase Auth  |
 
 ---
-
-### 📸 Screenshots *(optional)*
-
-> Want to make this even cooler? Add screenshots or demo GIFs of:
-> - Crop browsing
-> - Farmer dashboard
-> - Razorpay checkout screen
-
----
-
-Let me know if you'd like a **project badge**, **live app demo**, or **GIF integration** to level it up even more!
